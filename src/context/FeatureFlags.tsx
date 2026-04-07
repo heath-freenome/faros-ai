@@ -3,10 +3,14 @@ import type { ReactNode } from 'react';
 
 // ── Types ──────────────────────────────────────────────────────────────────
 
+/** Dictionary of feature flag names to their enabled state. */
 type FlagMap = Record<string, boolean>;
 
+/** Value exposed by `FeatureFlagContext`. */
 interface FeatureFlagContextValue {
+  /** Current snapshot of all feature flags. */
   flags: FlagMap;
+  /** Enable or disable a named feature flag and persist the change to localStorage. */
   setFlag: (name: string, enabled: boolean) => void;
 }
 
@@ -40,9 +44,11 @@ const FeatureFlagContext = createContext<FeatureFlagContextValue | null>(null);
 
 // ── Provider ───────────────────────────────────────────────────────────────
 
+/** Provides feature flag state to the subtree and persists flags in localStorage. */
 export function FeatureFlagProvider({ children }: { children: ReactNode }) {
   const [flags, setFlags] = useState<FlagMap>(loadFlags);
 
+  /** Enables or disables the named feature flag and persists the change to localStorage. */
   const setFlag = useCallback((name: string, enabled: boolean) => {
     setFlags(prev => {
       const next = { ...prev, [name]: enabled };

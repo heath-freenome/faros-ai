@@ -3,15 +3,22 @@ import { parseApiError } from './apiError';
 
 const INSIGHTS_API_BASE = 'http://localhost:4000/api/ai/insights';
 
+/** AI-generated insight payload returned by the insights API. */
 export interface EmployeeInsights {
+  /** Human-readable summary of the employee's activity trends. */
   summary?: string;
+  /** Model confidence score in the range [0, 1]. */
   confidence?: number;
+  /** Internal database ID of the employee these insights belong to. */
   employeeId?: string;
+  /** Human-readable UID of the employee these insights belong to. */
   employeeUid?: string;
+  /** ISO-8601 timestamp of when the insights were generated. */
   generatedAt?: string;
+  /** Identifier of the AI model that produced the insights. */
   model?: string;
+  /** Time taken by the backend to generate the insights, in milliseconds. */
   processingTimeMs?: number;
-  [key: string]: unknown;
 }
 
 /** Remove sentences that end with '..' Those sentences currently denote PII that was added to the insights. */
@@ -23,12 +30,21 @@ function filterPiiInSummary(summary: string): string {
     .trim();
 }
 
+/** Return value of `useEmployeeInsights`. */
 interface UseEmployeeInsightsResult {
+  /** The fetched insights payload, or null while loading or on error. */
   insights: EmployeeInsights | null;
+  /** True while the fetch is in-flight. */
   loading: boolean;
+  /** Human-readable error message if the fetch failed, otherwise null. */
   error: string | null;
 }
 
+/**
+ * Fetches AI-generated insights for a single employee.
+ * Passes `consentToken` as the `x-consent-token` request header.
+ * Re-fetches whenever `employeeId` or `consentToken` changes.
+ */
 export function useEmployeeInsights(
   employeeId: string,
   consentToken: string | null,

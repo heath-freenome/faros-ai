@@ -11,6 +11,12 @@ import { InsightsTooltipContent } from './InsightsTooltipContent';
 import { AiInsightsConsentDialog } from './AiInsightsConsentDialog';
 import { ExpiredTooltipContent } from './ExpiredTooltipContent.tsx';
 
+/**
+ * Returns MUI Tooltip `slotProps` that style the tooltip balloon and arrow
+ * with the given background colour.
+ *
+ * @param color - CSS colour string applied to both the balloon and its arrow.
+ */
 function tooltipSx(color: string) {
   return {
     tooltip: {
@@ -27,19 +33,28 @@ function tooltipSx(color: string) {
   };
 }
 
+/**
+ * Top-nav button for the AI employee insights feature.
+ * Hidden when the feature flag is off. Shows a filled star icon when consent is
+ * active, an outlined icon otherwise, and an amber warning tooltip when consent
+ * has expired.
+ */
 export function AiInsightsNavButton() {
   const aiInsightsEnabled = useFeatureFlag(ENABLE_AI_EMPLOYEE_INSIGHTS);
   const { consentToken, expiresAt } = useConsent();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [tooltipOpen, setTooltipOpen] = useState(aiInsightsEnabled && consentToken === null);
 
+  /** Closes the tooltip and opens the consent dialog. */
   const openDialog = useCallback(() => {
     setTooltipOpen(false);
     setDialogOpen(true);
   }, []);
 
+  /** Closes the consent dialog. */
   const closeDialog = useCallback(() => setDialogOpen(false), []);
 
+  /** Dismisses the informational tooltip without opening the dialog. */
   const closeTooltip = useCallback(() => setTooltipOpen(false), []);
 
   if (!aiInsightsEnabled) {

@@ -3,14 +3,20 @@ import type { ReactNode } from 'react';
 
 // ── Types ──────────────────────────────────────────────────────────────────
 
+/** Persisted consent state stored in sessionStorage. */
 export interface ConsentState {
+  /** The active consent token, `OPT_OUT_TOKEN` if declined, or `null` if not yet answered. */
   consentToken: string | null;
+  /** ISO-8601 datetime string at which the consent token expires, or `null`. */
   expiresAt: string | null;
 }
 
+/** Value exposed by `ConsentContext`. */
 interface ConsentContextValue extends ConsentState {
+  /** Record consent granted via the API — stores both token and expiry. */
   setConsent: (token: string, expiresAt: string) => void;
-  setConsentToken: (token: string) => void; // opt-out path (no expiry)
+  /** Store a token without an expiry date, used for the opt-out sentinel path. */
+  setConsentToken: (token: string) => void;
 }
 
 // ── Storage keys ───────────────────────────────────────────────────────────
@@ -18,6 +24,7 @@ interface ConsentContextValue extends ConsentState {
 const TOKEN_KEY   = 'ai_employee_insights_consent';
 const EXPIRY_KEY  = 'ai_employee_insights_consent_expires_at';
 
+/** Reads the current consent state from sessionStorage, returning nulls when absent. */
 function loadState(): ConsentState {
   return {
     consentToken: sessionStorage.getItem(TOKEN_KEY),
@@ -25,6 +32,10 @@ function loadState(): ConsentState {
   };
 }
 
+/**
+ * Writes the consent token and optional expiry to sessionStorage.
+ * Removes the expiry key entirely when `expiresAt` is null (opt-out path).
+ */
 function persistConsent(token: string, expiresAt: string | null): void {
   sessionStorage.setItem(TOKEN_KEY, token);
   if (expiresAt !== null) {
@@ -40,6 +51,7 @@ const ConsentContext = createContext<ConsentContextValue | null>(null);
 
 // ── Provider ───────────────────────────────────────────────────────────────
 
+/** Provides AI-insights consent state to the subtree and persists it in sessionStorage. */
 export function ConsentProvider({ children }: { children: ReactNode }) {
   const [state, setState] = useState<ConsentState>(loadState);
 
@@ -62,6 +74,7 @@ export function ConsentProvider({ children }: { children: ReactNode }) {
 
 // ── Hook ───────────────────────────────────────────────────────────────────
 
+/** Returns the consent state and setters. Must be used within a `ConsentProvider`. */
 export function useConsent(): ConsentContextValue {
   const ctx = useContext(ConsentContext);
   if (!ctx) {

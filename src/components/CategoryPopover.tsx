@@ -8,8 +8,11 @@ import type { FilterKey } from '../types';
 import { GRAY_50, GRAY_700 } from '../constants';
 import { DarkButton, GhostButton, PopoverSectionLabel } from '../styles/components';
 
+/** A single filterable dimension displayed in `CategoryPopover`. */
 interface FilterCategory {
+  /** The filter key used in state and API payloads. */
   key: FilterKey;
+  /** Human-readable label shown in the checkbox list. */
   label: string;
 }
 
@@ -20,15 +23,27 @@ export const FILTER_CATEGORIES: FilterCategory[] = [
   { key: 'trackingStatuses', label: 'Tracking Status' },
 ];
 
+/** Props for `CategoryPopover`. */
 interface CategoryPopoverProps {
+  /** Whether the popover is currently visible. */
   open: boolean;
+  /** DOM element the popover anchors to (the "Add Filter" button). */
   anchorEl: HTMLElement | null;
+  /** Filter keys checked in the current (uncommitted) selection. */
   pendingTypes: FilterKey[];
+  /** Called to set the pending types */
   setPendingTypes: Dispatch<SetStateAction<FilterKey[]>>;
+  /** Called when the user clicks Apply. */
   onApply: () => void;
+  /** Called when the user clicks Cancel or dismisses the popover. */
   onCancel: () => void;
 }
 
+/**
+ * Popover that lets the user choose which filter dimensions (teams, tracking
+ * status, accounts) to add to the filter bar. Changes are staged in
+ * `pendingTypes` and only committed when "Apply" is clicked.
+ */
 export function CategoryPopover({ open, anchorEl, pendingTypes, setPendingTypes, onApply, onCancel }: CategoryPopoverProps) {
   function toggle(key: FilterKey) {
     setPendingTypes(prev =>

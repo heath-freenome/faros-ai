@@ -4,11 +4,15 @@ import PersonIcon from '@mui/icons-material/Person';
 
 import { GRAY_400, GRAY_900, GREEN_600, AMBER_500 } from '../constants';
 
+/** Colour configuration for a single tracking status + category combination. */
 interface StatusConfig {
+  /** Colour applied to the person icon. */
   iconColor: string;
+  /** Colour applied to the status dot (reserved for future use). */
   dotColor: string;
 }
 
+/** Maps category keys (including `"default"`) to their `StatusConfig`. */
 type StatusMap = Record<string, StatusConfig>;
 
 const STATUS_CONFIG: Record<string, StatusMap> = {
@@ -22,11 +26,18 @@ const STATUS_CONFIG: Record<string, StatusMap> = {
   },
 };
 
+/** Props for `TrackingStatusCell`. */
 interface TrackingStatusCellProps {
+  /** Tracking inclusion status, e.g. `"Included"` or `"Ignored"`. */
   status: string;
+  /** Activity category, e.g. `"Active"` or `"Inactive"`. Empty string for ignored employees. */
   category: string;
 }
 
+/**
+ * Table cell content that renders a coloured person icon alongside the
+ * tracking status and (when applicable) the activity category as text.
+ */
 export function TrackingStatusCell({ status, category }: TrackingStatusCellProps) {
   const statusMap = STATUS_CONFIG[status] || STATUS_CONFIG.Ignored;
   const { iconColor } = statusMap[category] || statusMap.default;

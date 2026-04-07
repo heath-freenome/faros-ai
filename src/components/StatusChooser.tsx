@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import type { MouseEvent } from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
@@ -18,11 +18,17 @@ import { PopoverSectionLabel } from '../styles/components';
 
 // ── Status option definitions ──────────────────────────────────────────────
 
+/** A selectable tracking-status option with its associated badge colours. */
 export interface StatusOption {
+  /** Tracking status value, e.g. `"Included"` or `"Ignored"`. */
   status: string;
+  /** Activity category value, e.g. `"Active"`, `"Inactive"`, or `""`. */
   category: string;
+  /** Background colour for the badge. */
   bg: string;
+  /** Foreground/text colour for the badge. */
   color: string;
+  /** Human-readable label shown in the dropdown and badge. */
   label: string;
 }
 
@@ -32,6 +38,10 @@ export const STATUS_OPTIONS: StatusOption[] = [
   { status: 'Ignored',  category: '',         bg: GRAY_100,  color: GRAY_600,  label: 'Ignored' },
 ];
 
+/**
+ * Returns the `StatusOption` matching the given status/category pair,
+ * falling back to the first option (Included · Active) if not found.
+ */
 export function getStatusOption(status: string, category: string): StatusOption {
   return (
     STATUS_OPTIONS.find(o => o.status === status && o.category === category) ??
@@ -41,24 +51,35 @@ export function getStatusOption(status: string, category: string): StatusOption 
 
 // ── Component ──────────────────────────────────────────────────────────────
 
+/** Props for `StatusChooser`. */
 interface StatusChooserProps {
+  /** The status to display */
   status: string;
+  /** The catecory of the status */
   category: string;
+  /** Called with the new status and category when the user picks an option. */
   onChange: (status: string, category: string) => void;
 }
 
+/**
+ * Inline badge-style dropdown for selecting an employee's tracking status.
+ * Renders the current selection as a coloured badge; clicking it opens a
+ * popover listing all available `STATUS_OPTIONS`.
+ */
 export function StatusChooser({ status, category, onChange }: StatusChooserProps) {
   const [anchor, setAnchor] = useState<HTMLElement | null>(null);
   const current = getStatusOption(status, category);
 
-  function open(e: MouseEvent<HTMLElement>) {
+  /** Opens the status-selection popover anchored to the clicked element. */
+  const open = useCallback((e: MouseEvent<HTMLElement>) => {
     setAnchor(e.currentTarget);
-  }
+  }, []);
 
-  function select(opt: StatusOption) {
+  /** Applies the chosen status option and closes the popover. */
+  const select = useCallback((opt: StatusOption) => {
     onChange(opt.status, opt.category);
     setAnchor(null);
-  }
+  }, [onChange]);
 
   return (
     <>

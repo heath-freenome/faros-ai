@@ -71,7 +71,11 @@ export const BRAND_NAVY_LIGHT = '#0A5A97';
 export const BRAND_ORANGE = '#E9560D';
 
 // ── App constants ──────────────────────────────────────────────────────────
+/** Hardcoded user identifier used for consent API calls during development. */
 export const DEFAULT_USER_ID = 'testUser';
+/** Feature flag name that enables the AI employee insights capability. */
 export const ENABLE_AI_EMPLOYEE_INSIGHTS = 'enable-ai-employee-insights';
+/** Sentinel consent token written when the user explicitly declines AI insights. */
 export const OPT_OUT_TOKEN = 'opted-out';
+/** Fixed height (px) of the top navigation bar, used for layout calculations. */
 export const TOP_NAV_HEIGHT = 48;

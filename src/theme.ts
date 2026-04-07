@@ -1,3 +1,4 @@
+/** MUI theme customised with Faros brand colours, Inter typography, and component style overrides. */
 import { createTheme } from '@mui/material/styles';
 
 import {
@@ -9,6 +10,7 @@ import {
   BLUE_100, BLUE_600,
 } from './constants';
 
+/** Shared MUI theme instance — import and pass to `ThemeProvider`. */
 export const theme = createTheme({
   palette: {
     primary: {

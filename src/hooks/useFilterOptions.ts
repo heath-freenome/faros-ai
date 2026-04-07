@@ -5,6 +5,11 @@ import { parseApiError } from './apiError';
 
 const GQL_ENDPOINT = 'http://localhost:4000/graphql';
 
+/**
+ * GraphQL query that fetches all available filter dimension values in a single request.
+ * Returns teams (uid + name), tracking statuses, tracking categories, and account types
+ * (type + source) used to populate filter popovers.
+ */
 const FILTER_OPTIONS_QUERY = `
   query {
     filterOptions {
@@ -16,12 +21,20 @@ const FILTER_OPTIONS_QUERY = `
   }
 `;
 
+/** Return value of `useFilterOptions`. */
 interface UseFilterOptionsResult {
+  /** The fetched filter dimension values, or `null` while loading or on error. */
   options: FilterOptions | null;
+  /** True while the initial fetch is in-flight. */
   loading: boolean;
+  /** Human-readable error message if the fetch failed, or `null`. */
   error: string | null;
 }
 
+/**
+ * Fetches available filter dimensions (teams, tracking statuses, account types)
+ * from the GraphQL API. Runs once on mount.
+ */
 export function useFilterOptions(): UseFilterOptionsResult {
   const [options, setOptions] = useState<FilterOptions | null>(null);
   const [loading, setLoading] = useState(true);

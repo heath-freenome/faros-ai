@@ -4,6 +4,7 @@ import Checkbox from '@mui/material/Checkbox';
 import Box from '@mui/material/Box';
 import Skeleton from '@mui/material/Skeleton';
 
+/** Placeholder table row rendered while employee data is loading. */
 export function SkeletonRow() {
   return (
     <TableRow>

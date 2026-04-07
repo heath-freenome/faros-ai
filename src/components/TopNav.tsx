@@ -13,6 +13,11 @@ import { SquareIconButton } from './SquareIconButton';
 import { NavButton } from './NavButton';
 import { AiInsightsNavButton } from './AiInsightsNavButton';
 
+/**
+ * Fixed-height top navigation bar.
+ * Contains workspace/module nav on the left, the AI insights button in the
+ * centre-right, and personal/workspace icon shortcuts on the far right.
+ */
 export function TopNav() {
   return (
     <Box
