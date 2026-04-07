@@ -8,8 +8,11 @@ import jiraIcon from '../../assets/icons/jira.png';
 import pagerdutyIcon from '../../assets/icons/pagerduty.png';
 import googleCalendarIcon from '../../assets/icons/google-calendar.png';
 
+/** Display metadata for a single account type. */
 interface AccountMeta {
+  /** Path to the integration's icon image. */
   icon: string;
+  /** Accessible label used in `alt` text and tooltips. */
   label: string;
 }
 
@@ -23,10 +26,17 @@ const ACCOUNT_META: Record<string, AccountMeta> = {
 // Canonical order to display account icons
 const TYPE_ORDER = ['vcs', 'tms', 'ims', 'cal'];
 
+/** Props for `AccountIcons`. */
 interface AccountIconsProps {
+  /** The list of accounts for which to display the icons */
   accounts: Account[];
 }
 
+/**
+ * Renders a row of integration icons (GitHub, Jira, PagerDuty, Google Calendar)
+ * for the account types present on an employee. Deduplicates by type and shows
+ * a tooltip listing individual account UIDs on hover.
+ */
 export function AccountIcons({ accounts }: AccountIconsProps) {
   if (!accounts?.length) {
     return (

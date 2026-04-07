@@ -1,3 +1,4 @@
+import { useCallback } from 'react';
 import type { MouseEvent } from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
@@ -6,14 +7,30 @@ import CloseIcon from '@mui/icons-material/Close';
 
 import {GRAY_300, GRAY_400, GRAY_700, SKY_100, SKY_200, SKY_700} from '../constants';
 
+/** Props for `FilterChip`. */
 interface FilterChipProps {
+  /** Filter dimension name, e.g. "Team". */
   label: string;
+  /** Currently selected value summary, e.g. "Frontend" or "3 selected". */
   valueLabel: string;
+  /** Called when the chip body is clicked (opens the sub-filter popover). */
   onClick: (e: MouseEvent<HTMLElement>) => void;
+  /** Called when the close icon is clicked (removes this filter). */
   onRemove: () => void;
 }
 
+/**
+ * Active filter chip displayed in the filter bar.
+ * Shows the dimension label and current value summary; clicking opens the
+ * sub-filter popover, and the × icon removes the filter entirely.
+ */
 export function FilterChip({ label, valueLabel, onClick, onRemove }: FilterChipProps) {
+  /** Stops propagation to the chip body and removes this filter dimension. */
+  const handleRemove = useCallback((e: MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    onRemove();
+  }, [onRemove]);
+
   return (
     <Box
       sx={{
@@ -36,10 +53,7 @@ export function FilterChip({ label, valueLabel, onClick, onRemove }: FilterChipP
       </Typography>
       <IconButton
         size="small"
-        onClick={(e: MouseEvent<HTMLButtonElement>) => {
-          e.stopPropagation();
-          onRemove();
-        }}
+        onClick={handleRemove}
         sx={{ p: 0, ml: 0.25, color: GRAY_400, '&:hover': { color: GRAY_700, backgroundColor: 'transparent' } }}
       >
         <CloseIcon sx={{ fontSize: 13 }} />

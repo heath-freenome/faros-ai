@@ -8,10 +8,17 @@ import { EmployeeDetailPanel } from './EmployeeDetailPanel';
 import { GRAY_500, GRAY_900, TOP_NAV_HEIGHT } from '../constants';
 import type { Employee } from '../types';
 
+/** Props for `EmployeesPage`. */
 interface EmployeesPageProps {
-    breadcrumb: ReactNode;
+  /** Breadcrumb node rendered above the page title. */
+  breadcrumb: ReactNode;
 }
 
+/**
+ * Top-level page layout for the Employees section.
+ * Renders the breadcrumb, page heading, employee table, and an optional
+ * side-panel for the selected employee, all in a horizontally split layout.
+ */
 export function EmployeesPage(props: EmployeesPageProps) {
   const { breadcrumb } = props;
   const [selectedEmployee, setSelectedEmployee] = useState<Employee | null>(null);

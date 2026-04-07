@@ -6,11 +6,19 @@ import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import { BLUE_50, BLUE_600, GRAY_400, GRAY_700, GRAY_900 } from '../constants';
 import { useEmployeeInsights } from '../hooks/useEmployeeInsights';
 
+/** Props for `InsightsSection`. */
 interface InsightsSectionProps {
+  /** Internal database ID of the employee whose insights should be fetched. */
   employeeId: string;
+  /** Active consent token forwarded to the insights API request. */
   consentToken: string;
 }
 
+/**
+ * Collapsible AI insights card rendered inside `EmployeeDetailPanel`.
+ * Fetches insights for the given employee and renders the summary text and
+ * a confidence progress bar.  Shows skeleton placeholders while loading.
+ */
 export function InsightsSection({ employeeId, consentToken }: InsightsSectionProps) {
   const { insights, loading, error } = useEmployeeInsights(employeeId, consentToken);
 

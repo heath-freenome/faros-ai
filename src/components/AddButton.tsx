@@ -3,10 +3,13 @@ import AddIcon from '@mui/icons-material/Add';
 
 import { GRAY_300, GRAY_400, GRAY_700 } from '../constants';
 
+/** Props for `AddButton`. */
 interface AddButtonProps {
+  /** Text displayed next to the plus icon. */
   label: string;
 }
 
+/** Outlined ghost button with a leading plus icon, used in detail-panel field rows. */
 export function AddButton({ label }: AddButtonProps) {
   return (
     <Button

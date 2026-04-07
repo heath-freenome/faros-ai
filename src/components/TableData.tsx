@@ -31,21 +31,37 @@ const STICKY_LAST = { ...STICKY, right: 0, zIndex: 3, borderLeft: `1px solid ${G
 
 // ── Props ──────────────────────────────────────────────────────────────────
 
+/** Props for `TableData`. */
 interface TableDataProps {
+  /** The list of Employee records to display in the TableData component */
   employees: Employee[];
+  /** Flag indicating whether the TableData is in the loading state */
   loading: boolean;
+  /** Current page size; controls the number of skeleton rows shown while loading. */
   pageSize: number;
+  /** Set of employee IDs that are currently checked. */
   selected: Set<string>;
+  /** True when every employee on the current page is selected. */
   allSelected: boolean;
+  /** True when some (but not all) employees on the current page are selected. */
   someSelected: boolean;
+  /** ID of the employee currently open in the detail panel, or undefined. */
   viewedEmployeeId?: string;
+  /** Called when the header checkbox changes — selects or deselects all visible rows. */
   onSelectAll: (e: ChangeEvent<HTMLInputElement>) => void;
+  /** Called when a single row's checkbox is toggled, with that employee's ID. */
   onSelectOne: (id: string) => void;
+  /** Called with the full employee object when the user clicks "View". */
   onView: (emp: Employee) => void;
 }
 
 // ── Component ──────────────────────────────────────────────────────────────
 
+/**
+ * Scrollable MUI Table that renders employee rows with sticky first/last columns.
+ * Shows skeleton rows while loading, an empty-state message when no results are found,
+ * and highlights selected or currently-viewed rows in light blue.
+ */
 export function TableData({
   employees,
   loading,

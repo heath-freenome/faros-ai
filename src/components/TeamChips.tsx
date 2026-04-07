@@ -17,8 +17,11 @@ import {
   PINK_100, PINK_800,
 } from '../constants';
 
+/** Background and foreground colour pair for a team chip. */
 interface TeamColor {
+  /** Chip background colour. */
   bg: string;
+  /** Chip text/foreground colour. */
   color: string;
 }
 
@@ -41,6 +44,11 @@ const FALLBACK_PALETTE: TeamColor[] = [
   { bg: INDIGO_100, color: INDIGO_800 },
 ];
 
+/**
+ * Returns the display colour for a team by name.
+ * Known team names are mapped to fixed colours; unknown names use a stable
+ * hash to pick from `FALLBACK_PALETTE`.
+ */
 function getTeamColor(name = ''): TeamColor {
   const key = name.toLowerCase();
   if (TEAM_COLOR_MAP[key]) {
@@ -51,10 +59,13 @@ function getTeamColor(name = ''): TeamColor {
   return FALLBACK_PALETTE[Math.abs(h) % FALLBACK_PALETTE.length];
 }
 
+/** Props for `TeamChips`. */
 interface TeamChipsProps {
+  /** The list of Team data do show chips for */
   teams: Team[];
 }
 
+/** Renders a row of coloured chips, one per team, using stable per-team colours. */
 export function TeamChips({ teams }: TeamChipsProps) {
   if (!teams?.length) {
     return <Typography sx={{ color: GRAY_400, fontSize: '0.8rem' }}>—</Typography>;

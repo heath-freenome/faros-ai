@@ -2,10 +2,16 @@ import Box from '@mui/material/Box';
 import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 import Typography from '@mui/material/Typography';
 
+/** Props for `ExpiredTooltipContent`. */
 interface ExpiredTooltipContentProps {
+  /** Called when the user clicks the "Re-consent now" link. */
   onReconsent: () => void;
 }
 
+/**
+ * Amber tooltip body shown when the AI insights consent token has expired.
+ * Prompts the user to re-consent via a clickable inline link.
+ */
 export function ExpiredTooltipContent({ onReconsent }: ExpiredTooltipContentProps) {
   return (
     <Box sx={{ p: 0.5, maxWidth: 240 }}>

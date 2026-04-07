@@ -5,23 +5,42 @@ import { parseApiError } from './apiError';
 
 const GQL_ENDPOINT = 'http://localhost:4000/graphql';
 
+/** Variables passed to the `GetEmployees` GraphQL query. */
 interface GqlVariables {
+  /** Maximum number of records to return in a single page. */
   first: number;
+  /** Relay cursor marking the exclusive start of the page, or `null` for the first page. */
   after: string | null;
+  /** Free-text search string, or `null` for no search filter. */
   search: string | null;
+  /** Structured filter payload, or `null` for no filters. */
   filter: ApiFilter;
 }
 
+/** Shape of the `employees` connection in the GraphQL response. */
 interface EmployeesConnection {
+  /** Total number of employees matching the query across all pages. */
   totalCount: number;
+  /** Relay pagination metadata for the current page. */
   pageInfo: PageInfo;
+  /** Ordered list of edges, each pairing a cursor with its employee node. */
   edges: { cursor: string; node: Employee }[];
 }
 
+/** Top-level data shape returned by the `GetEmployees` query. */
 interface GqlData {
+  /** Paginated employee connection containing edges, pageInfo, and totalCount. */
   employees: EmployeesConnection;
 }
 
+/**
+ * Executes a GraphQL query against the employees endpoint.
+ * Throws an `Error` for non-2xx HTTP responses or top-level GraphQL errors.
+ *
+ * @param query - GraphQL query string.
+ * @param variables - Variables to include in the request body.
+ * @returns Parsed `data` field from the GraphQL response.
+ */
 async function gqlFetch(query: string, variables: GqlVariables): Promise<GqlData> {
   const res = await fetch(GQL_ENDPOINT, {
     method: 'POST',
@@ -38,6 +57,11 @@ async function gqlFetch(query: string, variables: GqlVariables): Promise<GqlData
   return json.data;
 }
 
+/**
+ * GraphQL query that fetches a paginated, searchable, filterable list of employees.
+ * Returns core employee fields plus nested `teams` and `accounts` associations,
+ * along with Relay-style `pageInfo` and `totalCount` for pagination.
+ */
 const EMPLOYEES_QUERY = `
   query GetEmployees($first: Int, $after: String, $search: String, $filter: EmployeeFilter) {
     employees(first: $first, after: $after, search: $search, filter: $filter) {
@@ -74,30 +98,52 @@ const EMPLOYEES_QUERY = `
   }
 `;
 
+/** Input parameters for `useEmployees`. */
 interface UseEmployeesParams {
+  /** Free-text search string; empty string fetches all. */
   search: string;
+  /** Active filter payload, or `null` for no filters. */
   filter: ApiFilter;
+  /** Number of records per page (defaults to 5). */
   pageSize?: number;
 }
 
+/** Internal state managed by `useEmployees`. */
 interface EmployeesState {
+  /** Employees on the current page. */
   employees: Employee[];
+  /** Total number of employees matching the current search/filter across all pages. */
   totalCount: number;
+  /** Relay pagination metadata for the current page, or null before the first fetch. */
   pageInfo: PageInfo | null;
+  /** True while a fetch is in-flight. */
   loading: boolean;
+  /** Human-readable error message from the last failed fetch, or null. */
   error: string | null;
+  /** Zero-based current page index. */
   page: number;
 }
 
+/** Return value of `useEmployees`. */
 interface UseEmployeesResult extends EmployeesState {
+  /** Navigate to the next page. No-op if no next page. */
   goNext: () => void;
+  /** Navigate to the previous page. No-op if on the first page. */
   goPrev: () => void;
+  /** True when there is a previous page to navigate to. */
   hasPrev: boolean;
+  /** True when there is a next page to navigate to. */
   hasNext: boolean;
+  /** 1-based index of the first visible record (0 when empty). */
   startIndex: number;
+  /** 1-based index of the last visible record (0 when empty). */
   endIndex: number;
 }
 
+/**
+ * Fetches a paginated, filterable list of employees from the GraphQL API.
+ * Resets to page 0 whenever `search`, `filter`, or `pageSize` changes.
+ */
 export function useEmployees({ search, filter, pageSize = 5 }: UseEmployeesParams): UseEmployeesResult {
   const [state, setState] = useState<EmployeesState>({
     employees: [],
@@ -111,6 +157,13 @@ export function useEmployees({ search, filter, pageSize = 5 }: UseEmployeesParam
   // cursorHistory[i] = the `after` cursor needed to load page i
   const cursorHistory = useRef<(string | null)[]>([null]);
 
+  /**
+   * Fetches a single page of employees using the given cursor and updates component state.
+   * Re-created whenever `search`, `filter`, or `pageSize` changes.
+   *
+   * @param afterCursor - Relay cursor marking the start of the page, or `null` for page 0.
+   * @param pageIndex - Zero-based index of the page being loaded.
+   */
   const fetchPage = useCallback(async (afterCursor: string | null, pageIndex: number) => {
     setState(s => ({ ...s, loading: true, error: null }));
     try {
@@ -140,6 +193,7 @@ export function useEmployees({ search, filter, pageSize = 5 }: UseEmployeesParam
     fetchPage(null, 0);
   }, [fetchPage]);
 
+  /** Advances to the next page, caching the end cursor for forward navigation. No-op if no next page exists. */
   const goNext = useCallback(() => {
     if (!state.pageInfo?.hasNextPage) {
       return;
@@ -152,6 +206,7 @@ export function useEmployees({ search, filter, pageSize = 5 }: UseEmployeesParam
     fetchPage(cursor, nextPage);
   }, [state.pageInfo, state.page, fetchPage]);
 
+  /** Returns to the previous page using the cached cursor history. No-op when on page 0. */
   const goPrev = useCallback(() => {
     if (state.page <= 0) {
       return;

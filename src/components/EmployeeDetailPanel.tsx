@@ -25,13 +25,20 @@ import { InsightsSection } from './InsightsSection';
 
 // ── Props ──────────────────────────────────────────────────────────────────
 
+/** Props for `EmployeeDetailPanel`. */
 interface EmployeeDetailPanelProps {
+  /** The employee for which the details are being provided */
   employee: Employee;
+  /** Called when the user clicks the close button or "Cancel". */
   onClose: () => void;
 }
 
 // ── Component ──────────────────────────────────────────────────────────────
 
+/**
+ * Slide-in side panel that displays editable profile fields for a single employee.
+ * Shows the AI insights section when the feature flag is enabled and consent is active.
+ */
 export function EmployeeDetailPanel({ employee, onClose }: EmployeeDetailPanelProps) {
   const [name, setName] = useState(employee.name);
   const [email, setEmail] = useState(employee.email);

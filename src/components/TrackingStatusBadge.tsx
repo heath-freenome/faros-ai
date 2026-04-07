@@ -25,11 +25,18 @@ const CATEGORY_STYLES: Record<string, { backgroundColor: string; color: string }
   },
 };
 
+/** Props for `TrackingStatusBadge`. */
 interface TrackingStatusBadgeProps {
+  /** Tracking inclusion status, e.g. `"Included"` or `"Ignored"`. */
   status: string;
+  /** Activity category, e.g. `"Active"` or `"Inactive"`. */
   category: string;
 }
 
+/**
+ * Renders up to two coloured chips stacked vertically — one for the tracking
+ * status (e.g. "Included") and one for the activity category (e.g. "Active").
+ */
 export function TrackingStatusBadge({ status, category }: TrackingStatusBadgeProps) {
   const statusStyle = STATUS_STYLES[status] || STATUS_STYLES.Ignored;
   const categoryStyle = CATEGORY_STYLES[category] || CATEGORY_STYLES.Inactive;

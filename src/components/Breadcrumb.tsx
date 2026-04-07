@@ -8,10 +8,12 @@ import AddIcon from '@mui/icons-material/Add';
 import { GRAY_400, GRAY_700 } from '../constants';
 import { PrimaryButton } from '../styles/components';
 
+/** Props for `CrumbLink`. */
 interface CrumbLinkProps {
   children: ReactNode;
 }
 
+/** Individual clickable breadcrumb label. */
 function CrumbLink({ children }: CrumbLinkProps) {
   return (
     <Typography
@@ -28,10 +30,16 @@ function CrumbLink({ children }: CrumbLinkProps) {
   );
 }
 
+/** Chevron separator rendered between breadcrumb items. */
 function CrumbSep() {
   return <ChevronRightIcon sx={{ fontSize: 14, color: GRAY_400, mx: 0.25 }} />;
 }
 
+/**
+ * Page breadcrumb bar for the Employees page.
+ * Hard-coded to "Admin Settings > Organization Setup > Employees Page" with a
+ * primary "New" action button on the right.
+ */
 export function Breadcrumb() {
   return (
     <Box

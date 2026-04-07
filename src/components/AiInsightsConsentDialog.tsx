@@ -16,14 +16,22 @@ import { PrimaryButton } from '../styles/components';
 
 const CONSENT_API = 'http://localhost:4000/api/ai/consent';
 
+/** Internal state for the feedback snackbar shown after a consent action. */
 interface SnackbarState {
+  /** Whether the snackbar is currently visible. */
   open: boolean;
+  /** Alert severity level, controls the icon and background colour. */
   severity: 'success' | 'info';
+  /** Message text displayed inside the snackbar. */
   message: string;
 }
 
 const SNACKBAR_CLOSED: SnackbarState = { open: false, severity: 'success', message: '' };
 
+/**
+ * Formats an ISO-8601 expiry timestamp into a locale-aware, human-readable string.
+ * Falls back to the raw string if parsing fails.
+ */
 function formatExpiry(expiresAt: string): string {
   try {
     return new Date(expiresAt).toLocaleString(undefined, {
@@ -35,19 +43,30 @@ function formatExpiry(expiresAt: string): string {
   }
 }
 
+/** Props for `AiInsightsConsentDialog`. */
 interface AiInsightsConsentDialogProps {
+  /** Flag indicating whether the dialog is open */
   open: boolean;
+  /** Called after the user either grants or declines consent. */
   onClose?: () => void;
 }
 
+/**
+ * Modal dialog that asks the user to grant or decline AI employee insights consent.
+ * On "Yes", POSTs to the consent API and stores the returned token + expiry.
+ * On "No", stores the opt-out sentinel token.
+ * In both cases a confirmation snackbar is shown after the dialog closes.
+ */
 export function AiInsightsConsentDialog({ open, onClose }: AiInsightsConsentDialogProps) {
   const { setConsent, setConsentToken } = useConsent();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [snackbar, setSnackbar] = useState<SnackbarState>(SNACKBAR_CLOSED);
 
+  /** Resets the snackbar to its closed state. */
   const closeSnackbar = useCallback(() => setSnackbar(SNACKBAR_CLOSED), []);
 
+  /** POSTs to the consent API and stores the returned token + expiry on success. */
   async function handleYes() {
     setLoading(true);
     setError(null);
@@ -75,6 +94,7 @@ export function AiInsightsConsentDialog({ open, onClose }: AiInsightsConsentDial
     }
   }
 
+  /** Stores the opt-out sentinel token and closes the dialog without an API call. */
   function handleNo() {
     setConsentToken(OPT_OUT_TOKEN);
     onClose?.();
