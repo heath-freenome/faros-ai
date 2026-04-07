@@ -9,11 +9,11 @@ import IconButton from "@mui/material/IconButton";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 
-import {GRAY_100, GRAY_200, GRAY_300, GRAY_50, GRAY_500, GRAY_700} from "../constants.ts";
+import { GRAY_100, GRAY_200, GRAY_300, GRAY_50, GRAY_500, GRAY_700, WHITE } from "../constants";
 
 const PAGE_SIZES = [5, 10, 25, 50];
 
-export function Pagination(props: {
+interface PaginationProps {
     pageSize: number,
     startIndex: number,
     endIndex: number,
@@ -24,7 +24,9 @@ export function Pagination(props: {
     hasPrev: boolean,
     onNext: () => void,
     hasNext: boolean
-}) {
+}
+
+export function Pagination(props: PaginationProps) {
     const { pageSize, startIndex, endIndex, loading, totalCount, hasNext, hasPrev, onPrev, onNext, onChange } = props;
 
     const handleChange = useCallback((e: SelectChangeEvent<number>) =>
@@ -33,7 +35,19 @@ export function Pagination(props: {
     );
 
     return (
-        <Box sx={{display: "flex", justifyContent: "flex-end", alignItems: "center", mt: 1.5, gap: 0.75}}>
+        <Box sx={{
+            display: "flex",
+            justifyContent: "flex-end",
+            alignItems: "center",
+            borderRadius: '0 0 8px 8px',
+            mr: -0.25,
+            py: 1.5,
+            px: 2,
+            gap: 0.75,
+            backgroundColor: WHITE,
+            border: `1px solid ${GRAY_200}`,
+            borderTop: 0,
+        }}>
             <Select<number>
                 value={pageSize}
                 onChange={handleChange}
