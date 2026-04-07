@@ -35,12 +35,18 @@ export function useFilterOptions(): UseFilterOptionsResult {
       body: JSON.stringify({ query: FILTER_OPTIONS_QUERY }),
     })
       .then(async r => {
-        if (!r.ok) throw new Error(await parseApiError(r));
+        if (!r.ok) {
+          throw new Error(await parseApiError(r));
+        }
         return r.json() as Promise<{ errors?: { message: string }[]; data: { filterOptions: FilterOptions } }>;
       })
       .then(json => {
-        if (cancelled) return;
-        if (json.errors?.length) throw new Error(json.errors[0].message);
+        if (cancelled) {
+          return;
+        }
+        if (json.errors?.length) {
+          throw new Error(json.errors[0].message);
+        }
         setOptions(json.data.filterOptions);
         setLoading(false);
       })

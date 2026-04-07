@@ -28,9 +28,13 @@ async function gqlFetch(query: string, variables: GqlVariables): Promise<GqlData
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ query, variables }),
   });
-  if (!res.ok) throw new Error(await parseApiError(res));
+  if (!res.ok) {
+    throw new Error(await parseApiError(res));
+  }
   const json: { errors?: { message: string }[]; data: GqlData } = await res.json();
-  if (json.errors?.length) throw new Error(json.errors[0].message);
+  if (json.errors?.length) {
+    throw new Error(json.errors[0].message);
+  }
   return json.data;
 }
 
@@ -137,7 +141,9 @@ export function useEmployees({ search, filter, pageSize = 5 }: UseEmployeesParam
   }, [fetchPage]);
 
   const goNext = useCallback(() => {
-    if (!state.pageInfo?.hasNextPage) return;
+    if (!state.pageInfo?.hasNextPage) {
+      return;
+    }
     const nextPage = state.page + 1;
     const cursor = state.pageInfo.endCursor;
     if (cursorHistory.current.length <= nextPage) {
@@ -147,7 +153,9 @@ export function useEmployees({ search, filter, pageSize = 5 }: UseEmployeesParam
   }, [state.pageInfo, state.page, fetchPage]);
 
   const goPrev = useCallback(() => {
-    if (state.page <= 0) return;
+    if (state.page <= 0) {
+      return;
+    }
     const prevPage = state.page - 1;
     fetchPage(cursorHistory.current[prevPage], prevPage);
   }, [state.page, fetchPage]);

@@ -21,7 +21,9 @@ import {Pagination} from "./Pagination.tsx";
 // ── Helpers ────────────────────────────────────────────────────────────────
 
 function buildItems(categoryKey: FilterKey, options: FilterOptions | null): FilterItem[] {
-  if (!options) return [];
+  if (!options) {
+    return [];
+  }
   if (categoryKey === 'teams') {
     return (options.teams || []).map(t => ({ value: t.uid, label: t.name }));
   }
@@ -35,8 +37,12 @@ function buildItems(categoryKey: FilterKey, options: FilterOptions | null): Filt
 }
 
 function chipValueLabel(selectedValues: string[], allItems: FilterItem[]): string {
-  if (!allItems.length || selectedValues.length === allItems.length) return 'All';
-  if (selectedValues.length === 0) return 'None';
+  if (!allItems.length || selectedValues.length === allItems.length) {
+    return 'All';
+  }
+  if (selectedValues.length === 0) {
+    return 'None';
+  }
   if (selectedValues.length === 1) {
     return allItems.find(i => i.value === selectedValues[0])?.label ?? selectedValues[0];
   }
