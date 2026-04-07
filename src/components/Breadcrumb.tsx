@@ -43,7 +43,7 @@ export function Breadcrumb() {
         mt: 1.5,
       }}
     >
-      {/* Crumbs */}
+      {/* Crumbs. This is hard-coded for pixel perfection. */}
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
         <CrumbLink>Admin Settings</CrumbLink>
         <CrumbSep />
