@@ -1,14 +1,14 @@
-import type { ReactNode } from 'react';
+import type { ReactNode, PropsWithChildren } from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
+import Diversity1OutlinedIcon from '@mui/icons-material/Diversity1Outlined';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined';
-import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
+import PhotoCameraFrontOutlinedIcon from '@mui/icons-material/PhotoCameraFrontOutlined';
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
-import BookmarkBorderOutlinedIcon from '@mui/icons-material/BookmarkBorderOutlined';
+import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
 import GridViewOutlinedIcon from '@mui/icons-material/GridViewOutlined';
 
 import { WHITE, GRAY_100, GRAY_200, GRAY_400, GRAY_500, GRAY_700, GRAY_900 } from '../constants';
@@ -41,6 +41,22 @@ function NavButton({ children, withArrow }: NavButtonProps) {
   );
 }
 
+function SquareIconButton({ children }: PropsWithChildren) {
+  return (
+      <IconButton
+        size="small"
+        sx={{
+            color: GRAY_500,
+            border: `1px solid ${GRAY_100}`,
+            borderRadius: 1,
+            mx: 0.5,
+        }}
+      >
+          {children}
+      </IconButton>
+  );
+}
+
 export function TopNav() {
   return (
     <Box
@@ -61,6 +77,9 @@ export function TopNav() {
       </IconButton>
 
       <NavButton withArrow>Default Workspace</NavButton>
+
+      <Divider orientation="vertical" flexItem sx={{ mx: 1, my: 1, borderColor: GRAY_200 }} />
+
       <NavButton withArrow>Modules</NavButton>
       <NavButton>Scorecard</NavButton>
 
@@ -70,25 +89,23 @@ export function TopNav() {
       <Typography sx={{ fontSize: '0.75rem', color: GRAY_400, fontWeight: 500, mr: 0.5 }}>
         Personal:
       </Typography>
-      <IconButton size="small" sx={{ color: GRAY_500 }}>
-        <PersonOutlineIcon sx={{ fontSize: 18 }} />
-      </IconButton>
-      <IconButton size="small" sx={{ color: GRAY_500 }}>
-        <NotificationsNoneOutlinedIcon sx={{ fontSize: 18 }} />
-      </IconButton>
-
-      <Divider orientation="vertical" flexItem sx={{ mx: 1, borderColor: GRAY_200 }} />
+      <SquareIconButton>
+        <PhotoCameraFrontOutlinedIcon sx={{ fontSize: 18 }} />
+      </SquareIconButton>
+      <SquareIconButton>
+        <Diversity1OutlinedIcon sx={{ fontSize: 18 }} />
+      </SquareIconButton>
 
       {/* Right side — Acme */}
-      <Typography sx={{ fontSize: '0.75rem', color: GRAY_400, fontWeight: 500, mr: 0.5 }}>
+      <Typography sx={{ fontSize: '0.75rem', color: GRAY_400, fontWeight: 500, ml: 1, mr: 0.5 }}>
         Acme:
       </Typography>
-      <IconButton size="small" sx={{ color: GRAY_500 }}>
+      <SquareIconButton>
         <HomeOutlinedIcon sx={{ fontSize: 18 }} />
-      </IconButton>
-      <IconButton size="small" sx={{ color: GRAY_500 }}>
-        <BookmarkBorderOutlinedIcon sx={{ fontSize: 18 }} />
-      </IconButton>
+      </SquareIconButton>
+      <SquareIconButton>
+        <FavoriteBorderOutlinedIcon sx={{ fontSize: 18 }} />
+      </SquareIconButton>
     </Box>
   );
 }

@@ -6,7 +6,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import AddIcon from '@mui/icons-material/Add';
 
-import { WHITE, GRAY_200, GRAY_400, GRAY_700, BLUE_600, BLUE_700 } from '../constants';
+import { WHITE, GRAY_400, GRAY_700, BLUE_600, BLUE_700 } from '../constants';
 
 interface CrumbLinkProps {
   children: ReactNode;
@@ -18,7 +18,7 @@ function CrumbLink({ children }: CrumbLinkProps) {
       component="span"
       sx={{
         fontSize: '0.8125rem',
-        color: BLUE_600,
+        color: GRAY_700,
         cursor: 'pointer',
         '&:hover': { textDecoration: 'underline' },
       }}
@@ -39,10 +39,8 @@ export function Breadcrumb() {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        px: 3,
         py: 1.5,
-        backgroundColor: WHITE,
-        borderBottom: `1px solid ${GRAY_200}`,
+        mt: 1.5,
       }}
     >
       {/* Crumbs */}

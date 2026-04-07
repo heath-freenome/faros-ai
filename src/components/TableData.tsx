@@ -38,7 +38,6 @@ interface TableDataProps {
   selected: Set<string>;
   allSelected: boolean;
   someSelected: boolean;
-  isViewingEmployee: boolean;
   viewedEmployeeId?: string;
   onSelectAll: (e: ChangeEvent<HTMLInputElement>) => void;
   onSelectOne: (id: string) => void;
@@ -54,14 +53,14 @@ export function TableData({
   selected,
   allSelected,
   someSelected,
-  isViewingEmployee,
   viewedEmployeeId,
   onSelectAll,
   onSelectOne,
   onView,
 }: TableDataProps) {
+  const isViewingEmployee = viewedEmployeeId !== undefined;
   return (
-    <TableContainer sx={{ border: `1px solid ${GRAY_200}`, borderRadius: '8px', overflowX: 'auto', backgroundColor: WHITE }}>
+    <TableContainer sx={{ border: `1px solid ${GRAY_200}`, borderRadius: '8px 8px 0 0', overflowX: 'auto', backgroundColor: WHITE }}>
       <Table>
         <TableHead>
           <TableRow sx={{ backgroundColor: GRAY_50 }}>

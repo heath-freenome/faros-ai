@@ -78,7 +78,6 @@ export function EmployeeTable({ onView, viewedEmployeeId }: EmployeeTableProps) 
   const [openSubFilterKey, setOpenSubFilterKey] = useState<FilterKey | null>(null);
 
   const { options: filterOptions } = useFilterOptions();
-  const isViewingEmployee = viewedEmployeeId !== undefined;
 
   const apiFilter = useMemo(
     () => buildApiFilter(activeFilterTypes, filterValues, filterOptions),
@@ -106,7 +105,11 @@ export function EmployeeTable({ onView, viewedEmployeeId }: EmployeeTableProps) 
   const handleSelectOne = useCallback((id: string) => {
     setSelected(prev => {
       const next = new Set(prev);
-      next.has(id) ? next.delete(id) : next.add(id);
+      if (next.has(id)) {
+          next.delete(id);
+      } else {
+          next.add(id);
+      }
       return next;
     });
   }, []);
@@ -207,8 +210,8 @@ export function EmployeeTable({ onView, viewedEmployeeId }: EmployeeTableProps) 
               px: 1.25,
               border: `1px solid ${GRAY_300}`,
               borderRadius: '6px',
-              backgroundColor: 'transparent',
-              '&:hover': {backgroundColor: 'transparent', borderColor: GRAY_400, color: GRAY_700},
+              backgroundColor: WHITE,
+              '&:hover': {backgroundColor: WHITE, borderColor: GRAY_400, color: GRAY_700},
               '& .MuiButton-startIcon': {mr: 0.5},
             }}
         >
@@ -265,7 +268,7 @@ export function EmployeeTable({ onView, viewedEmployeeId }: EmployeeTableProps) 
           selected={selected}
           allSelected={allSelected}
           someSelected={someSelected}
-          isViewingEmployee={isViewingEmployee}
+          viewedEmployeeId={viewedEmployeeId}
           onSelectAll={handleSelectAll}
           onSelectOne={handleSelectOne}
           onView={onView}
@@ -275,13 +278,13 @@ export function EmployeeTable({ onView, viewedEmployeeId }: EmployeeTableProps) 
           pageSize={pageSize}
           startIndex={startIndex}
           endIndex={endIndex}
-          onChange={setPageSize}
           loading={loading}
           totalCount={totalCount}
-          onPrev={goPrev}
           hasPrev={hasPrev}
-          onNext={goNext}
           hasNext={hasNext}
+          onChange={setPageSize}
+          onPrev={goPrev}
+          onNext={goNext}
       />
     </Box>
   );
