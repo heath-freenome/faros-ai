@@ -70,7 +70,7 @@ export function AiInsightsNavButton() {
         open={tooltipOpen || expired}
         title={
           expired
-            ? <ExpiredTooltipContent onClose={closeTooltip} onReconsent={openDialog}/>
+            ? <ExpiredTooltipContent onReconsent={openDialog}/>
             : <InsightsTooltipContent onClose={closeTooltip}/>
         }
         placement="bottom"
