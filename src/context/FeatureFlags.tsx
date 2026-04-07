@@ -17,7 +17,9 @@ const STORAGE_KEY = 'feature_flags';
 function loadFlags(): FlagMap {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return {};
+    if (!raw) {
+      return {};
+    }
     const parsed = JSON.parse(raw);
     if (typeof parsed === 'object' && parsed !== null && !Array.isArray(parsed)) {
       return parsed as FlagMap;
@@ -70,7 +72,9 @@ export function FeatureFlagProvider({ children }: { children: ReactNode }) {
  */
 export function useFeatureFlag(name: string): boolean {
   const ctx = useContext(FeatureFlagContext);
-  if (!ctx) throw new Error('useFeatureFlag must be used within a FeatureFlagProvider');
+  if (!ctx) {
+    throw new Error('useFeatureFlag must be used within a FeatureFlagProvider');
+  }
   return ctx.flags[name] === true;
 }
 
@@ -80,6 +84,8 @@ export function useFeatureFlag(name: string): boolean {
  */
 export function useSetFeatureFlag(): (name: string, enabled: boolean) => void {
   const ctx = useContext(FeatureFlagContext);
-  if (!ctx) throw new Error('useSetFeatureFlag must be used within a FeatureFlagProvider');
+  if (!ctx) {
+    throw new Error('useSetFeatureFlag must be used within a FeatureFlagProvider');
+  }
   return ctx.setFlag;
 }

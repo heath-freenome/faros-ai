@@ -14,7 +14,7 @@ export interface EmployeeInsights {
   [key: string]: unknown;
 }
 
-/** Remove sentences that end with '..' (incomplete/truncated output from the model). */
+/** Remove sentences that end with '..' Those sentences currently denote PII that was added to the insights. */
 function filterPiiInSummary(summary: string): string {
   const sentences = summary.split(/(?<=\.)\s+/);
   return sentences
@@ -48,14 +48,24 @@ export function useEmployeeInsights(
         const res = await fetch(`${INSIGHTS_API_BASE}/${employeeId}`, {
           headers: { 'x-consent-token': consentToken! },
         });
-        if (!res.ok) throw new Error(await parseApiError(res));
+        if (!res.ok) {
+          throw new Error(await parseApiError(res));
+        }
         const data = await res.json() as EmployeeInsights;
-        if (data.summary) data.summary = filterPiiInSummary(data.summary);
-        if (!cancelled) setInsights(data);
+        if (data.summary) {
+          data.summary = filterPiiInSummary(data.summary);
+        }
+        if (!cancelled) {
+          setInsights(data);
+        }
       } catch (err) {
-        if (!cancelled) setError(err instanceof Error ? err.message : 'Failed to load insights.');
+        if (!cancelled) {
+          setError(err instanceof Error ? err.message : 'Failed to load insights.');
+        }
       } finally {
-        if (!cancelled) setLoading(false);
+        if (!cancelled) {
+          setLoading(false);
+        }
       }
     }
 

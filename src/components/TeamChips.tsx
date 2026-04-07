@@ -43,7 +43,9 @@ const FALLBACK_PALETTE: TeamColor[] = [
 
 function getTeamColor(name = ''): TeamColor {
   const key = name.toLowerCase();
-  if (TEAM_COLOR_MAP[key]) return TEAM_COLOR_MAP[key];
+  if (TEAM_COLOR_MAP[key]) {
+    return TEAM_COLOR_MAP[key];
+  }
   let h = 0;
   for (let i = 0; i < key.length; i++) h = key.charCodeAt(i) + ((h << 5) - h);
   return FALLBACK_PALETTE[Math.abs(h) % FALLBACK_PALETTE.length];

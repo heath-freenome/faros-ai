@@ -41,7 +41,9 @@ export function AccountIcons({ accounts }: AccountIconsProps) {
     <Box sx={{ display: 'flex', gap: 0.75, alignItems: 'center', flexWrap: 'wrap' }}>
       {TYPE_ORDER.filter(t => presentTypes.has(t)).map(type => {
         const meta = ACCOUNT_META[type];
-        if (!meta) return null;
+        if (!meta) {
+          return null;
+        }
         // Find accounts of this type for tooltip
         const accountsOfType = accounts.filter(a => a.type === type);
         const tooltipContent = accountsOfType.map(a => `${a.source}: ${a.uid}`).join(', ');

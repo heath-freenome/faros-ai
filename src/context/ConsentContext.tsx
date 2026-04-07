@@ -45,6 +45,8 @@ export function ConsentProvider({ children }: { children: ReactNode }) {
 
 export function useConsent(): ConsentContextValue {
   const ctx = useContext(ConsentContext);
-  if (!ctx) throw new Error('useConsent must be used within a ConsentProvider');
+  if (!ctx) {
+    throw new Error('useConsent must be used within a ConsentProvider');
+  }
   return ctx;
 }
