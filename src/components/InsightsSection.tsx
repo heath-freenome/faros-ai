@@ -1,7 +1,7 @@
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Skeleton from '@mui/material/Skeleton';
-import AutoAwesomeOutlinedIcon from '@mui/icons-material/AutoAwesomeOutlined';
+import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 
 import { BLUE_50, BLUE_600, GRAY_400, GRAY_700, GRAY_900 } from '../constants';
 import { useEmployeeInsights } from '../hooks/useEmployeeInsights';
@@ -26,7 +26,7 @@ export function InsightsSection({ employeeId, consentToken }: InsightsSectionPro
     >
       {/* Section header */}
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75, mb: 1.5 }}>
-        <AutoAwesomeOutlinedIcon sx={{ fontSize: 15, color: BLUE_600 }} />
+        <AutoAwesomeIcon sx={{ fontSize: 15, color: BLUE_600 }} />
         <Typography sx={{ fontSize: '0.875rem', fontWeight: 600, color: GRAY_900 }}>
           AI Insights
         </Typography>

@@ -15,7 +15,7 @@ import {
   ENABLE_AI_EMPLOYEE_INSIGHTS, OPT_OUT_TOKEN,
 } from '../constants';
 import { useFeatureFlag } from '../context/FeatureFlags';
-import { useConsent } from '../context/ConsentContext';
+import { isConsentExpired, useConsent } from '../context/ConsentContext';
 import { fieldInputSx } from '../styles/fieldInputSx';
 import { PrimaryButton } from '../styles/components';
 import { FieldLabel } from './FieldLabel';
@@ -39,8 +39,9 @@ export function EmployeeDetailPanel({ employee, onClose }: EmployeeDetailPanelPr
   const [trackingCategory, setTrackingCategory] = useState(employee.trackingCategory);
 
   const aiInsightsEnabled = useFeatureFlag(ENABLE_AI_EMPLOYEE_INSIGHTS);
-  const { consentToken } = useConsent();
-  const showInsights = aiInsightsEnabled && consentToken !== null && consentToken !== OPT_OUT_TOKEN;
+  const { consentToken, expiresAt } = useConsent();
+  const showInsights =
+    aiInsightsEnabled && consentToken !== null && consentToken !== OPT_OUT_TOKEN && !isConsentExpired(expiresAt);
 
   function handleStatusChange(status: string, category: string) {
     setTrackingStatus(status);
