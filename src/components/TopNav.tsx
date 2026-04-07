@@ -9,7 +9,7 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import PhotoCameraFrontOutlinedIcon from '@mui/icons-material/PhotoCameraFrontOutlined';
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
-import GridViewOutlinedIcon from '@mui/icons-material/GridViewOutlined';
+import ViewSidebarOutlinedIcon from '@mui/icons-material/ViewSidebarOutlined';
 
 import { WHITE, GRAY_100, GRAY_200, GRAY_400, GRAY_500, GRAY_700, GRAY_900 } from '../constants';
 
@@ -73,7 +73,7 @@ export function TopNav() {
     >
       {/* Left side */}
       <IconButton size="small" sx={{ color: GRAY_500, mr: 0.5 }}>
-        <GridViewOutlinedIcon sx={{ fontSize: 18 }} />
+        <ViewSidebarOutlinedIcon sx={{ fontSize: 18, transform: 'rotate(180deg)' }} />
       </IconButton>
 
       <NavButton withArrow>Default Workspace</NavButton>
