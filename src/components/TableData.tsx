@@ -80,7 +80,7 @@ export function TableData({
 
             {/* Name — sticky left */}
             <TableCell sx={{ width: 220, minWidth: 220, ...(isViewingEmployee ? STICKY_COL_2 : undefined) }}>
-              <ColHeader sortable>Name</ColHeader>
+              <ColHeader sortable sorted>Name</ColHeader>
             </TableCell>
 
             {/* Scrollable middle columns */}
