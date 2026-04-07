@@ -5,3 +5,6 @@
   - In order to bootstrap the development environment, I used `npm create vite@latest faros-ai -- --template react-ts`
 - I used Claude Code with a Pro license (I'm still waiting for my OSS Max license to be granted to me)
   - 
+
+
+localStorage.setItem('feature_flags', JSON.stringify({ 'enable-ai-employee-insights': true }))  

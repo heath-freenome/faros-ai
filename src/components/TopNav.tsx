@@ -1,67 +1,49 @@
-import type { ReactNode, PropsWithChildren } from 'react';
+import {useCallback, useState} from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
-import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
+import Tooltip from '@mui/material/Tooltip';
 import Diversity1OutlinedIcon from '@mui/icons-material/Diversity1Outlined';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import PhotoCameraFrontOutlinedIcon from '@mui/icons-material/PhotoCameraFrontOutlined';
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
 import ViewSidebarOutlinedIcon from '@mui/icons-material/ViewSidebarOutlined';
+import AutoAwesomeOutlinedIcon from '@mui/icons-material/AutoAwesomeOutlined';
 
-import { WHITE, GRAY_100, GRAY_200, GRAY_400, GRAY_500, GRAY_700, GRAY_900 } from '../constants';
-
-interface NavButtonProps {
-  children: ReactNode;
-  withArrow?: boolean;
-}
-
-function NavButton({ children, withArrow }: NavButtonProps) {
-  return (
-    <Button
-      disableRipple
-      endIcon={withArrow ? <KeyboardArrowDownIcon sx={{ fontSize: '16px !important' }} /> : undefined}
-      sx={{
-        color: GRAY_700,
-        fontSize: '0.8125rem',
-        fontWeight: 500,
-        textTransform: 'none',
-        px: 1.25,
-        py: 0.5,
-        minWidth: 0,
-        borderRadius: '6px',
-        '&:hover': { backgroundColor: GRAY_100, color: GRAY_900 },
-        '& .MuiButton-endIcon': { ml: 0.25 },
-      }}
-    >
-      {children}
-    </Button>
-  );
-}
-
-function SquareIconButton({ children }: PropsWithChildren) {
-  return (
-      <IconButton
-        size="small"
-        sx={{
-            color: GRAY_500,
-            border: `1px solid ${GRAY_100}`,
-            borderRadius: 1,
-            mx: 0.5,
-        }}
-      >
-          {children}
-      </IconButton>
-  );
-}
+import {
+  BLUE_600,
+  ENABLE_AI_EMPLOYEE_INSIGHTS,
+  GRAY_200,
+  GRAY_400,
+  GRAY_500,
+  TOP_NAV_HEIGHT,
+  WHITE,
+} from '../constants';
+import { useFeatureFlag } from '../context/FeatureFlags';
+import { useConsent } from '../context/ConsentContext';
+import { AiInsightsConsentDialog } from './AiInsightsConsentDialog';
+import { SquareIconButton } from './SquareIconButton.tsx';
+import { NavButton } from './NavButton.tsx';
+import { InsightsTooltipContent } from './InsightsTooltipContent.tsx';
 
 export function TopNav() {
+  const aiInsightsEnabled = useFeatureFlag(ENABLE_AI_EMPLOYEE_INSIGHTS);
+  const { consentToken } = useConsent();
+  const [consentDialogOpen, setConsentDialogOpen] = useState(false);
+  const [tooltipOpen, setTooltipOpen] = useState(aiInsightsEnabled && consentToken === null);
+
+  const openDialog = useCallback(() => {
+    setTooltipOpen(false);
+    setConsentDialogOpen(true);
+  }, []);
+
+  const closeDialog = useCallback(() => setConsentDialogOpen(false), []);
+
   return (
     <Box
       sx={{
-        height: 48,
+        height: TOP_NAV_HEIGHT,
         backgroundColor: WHITE,
         borderBottom: `1px solid ${GRAY_200}`,
         display: 'flex',
@@ -84,6 +66,41 @@ export function TopNav() {
       <NavButton>Scorecard</NavButton>
 
       <Box sx={{ flex: 1 }} />
+
+      {/* AI Insights button — feature-flagged */}
+      {aiInsightsEnabled && (
+        <>
+          <Tooltip
+            open={tooltipOpen}
+            title={<InsightsTooltipContent onClose={() => setTooltipOpen(false)} />}
+            placement="bottom"
+            arrow
+            slotProps={{
+              tooltip: {
+                sx: {
+                  backgroundColor: BLUE_600,
+                  color: WHITE,
+                  borderRadius: '8px',
+                  px: 1.5,
+                  py: 1,
+                  boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+                },
+              },
+              arrow: { sx: { color: BLUE_600 } },
+            }}
+          >
+            <span>
+              <SquareIconButton onClick={openDialog}>
+                <AutoAwesomeOutlinedIcon sx={{ fontSize: 18 }} />
+              </SquareIconButton>
+            </span>
+          </Tooltip>
+          <AiInsightsConsentDialog
+            open={consentDialogOpen}
+            onClose={closeDialog}
+          />
+        </>
+      )}
 
       {/* Right side — Personal */}
       <Typography sx={{ fontSize: '0.75rem', color: GRAY_400, fontWeight: 500, mr: 0.5 }}>

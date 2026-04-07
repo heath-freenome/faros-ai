@@ -69,3 +69,9 @@ export const BRAND_NAVY_DARK = '#012847';
 export const BRAND_NAVY = '#023D67';
 export const BRAND_NAVY_LIGHT = '#0A5A97';
 export const BRAND_ORANGE = '#E9560D';
+
+// ── App constants ──────────────────────────────────────────────────────────
+export const DEFAULT_USER_ID = 'testUser';
+export const ENABLE_AI_EMPLOYEE_INSIGHTS = 'enable-ai-employee-insights';
+export const OPT_OUT_TOKEN = 'opted-out';
+export const TOP_NAV_HEIGHT = 48;
