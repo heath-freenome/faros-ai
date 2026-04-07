@@ -2,10 +2,10 @@ import type { ReactNode } from 'react';
 import { useState } from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
+
 import { EmployeeTable } from './EmployeeTable';
 import { EmployeeDetailPanel } from './EmployeeDetailPanel';
-
-import { GRAY_500, GRAY_900 } from '../constants';
+import { GRAY_500, GRAY_900, TOP_NAV_HEIGHT } from '../constants';
 import type { Employee } from '../types';
 
 interface EmployeesPageProps {
@@ -17,7 +17,7 @@ export function EmployeesPage(props: EmployeesPageProps) {
   const [selectedEmployee, setSelectedEmployee] = useState<Employee | null>(null);
 
   return (
-    <Box sx={{ flex: 1, display: 'flex', overflow: 'hidden', height: '100%' }}>
+    <Box sx={{ flex: 1, display: 'flex', overflow: 'hidden', height: `calc(100vh - ${TOP_NAV_HEIGHT}px)` }}>
       {/* Main content — scrolls independently */}
       <Box sx={{ flex: 1, overflowY: 'auto', px: 3, pt: 3, pb: 4 }}>
         {breadcrumb}
