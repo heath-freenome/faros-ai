@@ -8,7 +8,8 @@ import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 
 import { useConsent } from '../context/ConsentContext';
-import { BLUE_600, BLUE_700, DEFAULT_USER_ID, GRAY_200, GRAY_700, GRAY_900, OPT_OUT_TOKEN, WHITE } from '../constants';
+import { DEFAULT_USER_ID, GRAY_700, GRAY_900, OPT_OUT_TOKEN, WHITE } from '../constants';
+import { PrimaryButton } from '../styles/components';
 
 const CONSENT_API = 'http://localhost:4000/api/ai/consent';
 
@@ -51,27 +52,18 @@ export function AiInsightsConsentDialog({ open, onClose }: AiInsightsConsentDial
     <Dialog
       open={open}
       disableEscapeKeyDown
-      PaperProps={{
-        sx: {
-          borderRadius: '10px',
-          border: `1px solid ${GRAY_200}`,
-          minWidth: 420,
-          px: 0.5,
-        },
-      }}
+      PaperProps={{ elevation: 2, sx: { minWidth: 420, px: 0.5 } }}
     >
-      <DialogTitle sx={{ fontWeight: 600, fontSize: '1rem', color: GRAY_900, pb: 1 }}>
-        Enable employee insights capability
-      </DialogTitle>
+      <DialogTitle>Enable employee insights capability</DialogTitle>
 
       <DialogContent sx={{ pt: 0 }}>
-        <DialogContentText sx={{ fontSize: '0.875rem', color: GRAY_700 }}>
+        <DialogContentText>
           AI-powered employee insights will analyze activity data to surface productivity
           trends and recommendations. Do you consent to enabling this capability?
         </DialogContentText>
 
         {error && (
-          <DialogContentText sx={{ fontSize: '0.8125rem', color: 'error.main', mt: 1.5 }}>
+          <DialogContentText sx={{ color: 'error.main', mt: 1.5 }}>
             {error} Please try again.
           </DialogContentText>
         )}
@@ -85,33 +77,19 @@ export function AiInsightsConsentDialog({ open, onClose }: AiInsightsConsentDial
           sx={{
             color: GRAY_700,
             fontSize: '0.8125rem',
-            fontWeight: 500,
-            textTransform: 'none',
             '&:hover': { backgroundColor: 'transparent', color: GRAY_900 },
           }}
         >
           No
         </Button>
-        <Button
-          size="small"
-          variant="contained"
+        <PrimaryButton
           onClick={handleYes}
           disabled={loading}
           startIcon={loading ? <CircularProgress size={13} sx={{ color: WHITE }} /> : null}
-          sx={{
-            backgroundColor: BLUE_600,
-            color: WHITE,
-            fontSize: '0.8125rem',
-            fontWeight: 500,
-            textTransform: 'none',
-            borderRadius: '6px',
-            px: 2,
-            boxShadow: 'none',
-            '&:hover': { backgroundColor: BLUE_700, boxShadow: 'none' },
-          }}
+          sx={{ px: 2 }}
         >
           Yes
-        </Button>
+        </PrimaryButton>
       </DialogActions>
     </Dialog>
   );

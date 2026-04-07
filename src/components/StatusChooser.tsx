@@ -8,11 +8,13 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import CheckIcon from '@mui/icons-material/Check';
 
 import {
-  GRAY_50, GRAY_100, GRAY_200, GRAY_400, GRAY_600,
+  GRAY_50,
+  GRAY_100, GRAY_600,
   GREEN_100, GREEN_700,
   AMBER_100, AMBER_700,
   BLUE_600,
 } from '../constants';
+import { PopoverSectionLabel } from '../styles/components';
 
 // ── Status option definitions ──────────────────────────────────────────────
 
@@ -93,32 +95,11 @@ export function StatusChooser({ status, category, onChange }: StatusChooserProps
         onClose={() => setAnchor(null)}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
         transformOrigin={{ vertical: 'top', horizontal: 'left' }}
-        PaperProps={{
-          elevation: 2,
-          sx: {
-            mt: 0.75,
-            minWidth: 200,
-            borderRadius: '8px',
-            border: `1px solid ${GRAY_200}`,
-            overflow: 'hidden',
-            py: 0.75,
-          },
-        }}
+        PaperProps={{ sx: { mt: 0.75, minWidth: 200, py: 0.75 } }}
       >
-        <Typography
-          sx={{
-            fontSize: '0.6875rem',
-            fontWeight: 600,
-            color: GRAY_400,
-            textTransform: 'uppercase',
-            letterSpacing: '0.07em',
-            px: 2,
-            pt: 0.75,
-            pb: 1,
-          }}
-        >
+        <PopoverSectionLabel sx={{ px: 2, pt: 0.75, pb: 1, display: 'block' }}>
           Tracking status
-        </Typography>
+        </PopoverSectionLabel>
 
         {STATUS_OPTIONS.map(opt => {
           const isSelected = opt.status === status && opt.category === category;
