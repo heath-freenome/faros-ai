@@ -45,6 +45,12 @@ export function InsightsSection({ employeeId, consentToken }: InsightsSectionPro
           <Skeleton variant="text" width="90%" height={14} />
           <Skeleton variant="text" width="75%" height={14} />
           <Skeleton variant="text" width="82%" height={14} />
+          {/* Confidence bar skeleton */}
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 0.5 }}>
+            <Skeleton variant="text" width={64} height={14} />
+            <Skeleton variant="rounded" sx={{ flex: 1 }} height={4} />
+            <Skeleton variant="text" width={28} height={14} />
+          </Box>
         </Box>
       )}
 

@@ -1,4 +1,3 @@
-import type { Dispatch, SetStateAction } from 'react';
 import Popover from '@mui/material/Popover';
 import Box from '@mui/material/Box';
 import Checkbox from '@mui/material/Checkbox';
@@ -31,8 +30,8 @@ interface CategoryPopoverProps {
   anchorEl: HTMLElement | null;
   /** Filter keys checked in the current (uncommitted) selection. */
   pendingTypes: FilterKey[];
-  /** Called to set the pending types */
-  setPendingTypes: Dispatch<SetStateAction<FilterKey[]>>;
+  /** Called with the new pending type selection when the user toggles a dimension. */
+  setPendingTypes: (types: FilterKey[]) => void;
   /** Called when the user clicks Apply. */
   onApply: () => void;
   /** Called when the user clicks Cancel or dismisses the popover. */
@@ -46,9 +45,10 @@ interface CategoryPopoverProps {
  */
 export function CategoryPopover({ open, anchorEl, pendingTypes, setPendingTypes, onApply, onCancel }: CategoryPopoverProps) {
   function toggle(key: FilterKey) {
-    setPendingTypes(prev =>
-      prev.includes(key) ? prev.filter(k => k !== key) : [...prev, key]
-    );
+    const next = pendingTypes.includes(key)
+      ? pendingTypes.filter(k => k !== key)
+      : [...pendingTypes, key];
+    setPendingTypes(next);
   }
 
   return (

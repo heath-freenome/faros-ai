@@ -1,8 +1,8 @@
-import type { PropsWithChildren } from "react";
-import Button from "@mui/material/Button";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import type { PropsWithChildren } from 'react';
+import Button from '@mui/material/Button';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
-import { GRAY_100, GRAY_700, GRAY_900 } from "../constants.ts";
+import { GRAY_100, GRAY_700, GRAY_900 } from '../constants.ts';
 
 /** Props for `NavButton`. */
 interface NavButtonProps extends PropsWithChildren {

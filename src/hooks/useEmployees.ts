@@ -1,7 +1,9 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 
 import type { Employee, PageInfo, ApiFilter } from '../types';
-import { parseApiError } from './apiError';
+import { DEFAULT_USER_ID } from '../constants';
+import { parseApiError } from './parseApiError.ts';
+import { useTelemetry } from './useTelemetry';
 
 const GQL_ENDPOINT = 'http://localhost:4000/graphql';
 
@@ -143,8 +145,15 @@ interface UseEmployeesResult extends EmployeesState {
 /**
  * Fetches a paginated, filterable list of employees from the GraphQL API.
  * Resets to page 0 whenever `search`, `filter`, or `pageSize` changes.
+ *
+ * **Telemetry**
+ * | Event | When | `details` |
+ * |---|---|---|
+ * | `api.employees.success` | Page fetched successfully | `{ page, pageSize, afterCursor, search, filter }` |
+ * | `api.employees.error` | Fetch or GraphQL error | `{ page, pageSize, afterCursor, search, filter }` |
  */
 export function useEmployees({ search, filter, pageSize = 5 }: UseEmployeesParams): UseEmployeesResult {
+  const { track } = useTelemetry();
   const [state, setState] = useState<EmployeesState>({
     employees: [],
     totalCount: 0,
@@ -159,19 +168,31 @@ export function useEmployees({ search, filter, pageSize = 5 }: UseEmployeesParam
 
   /**
    * Fetches a single page of employees using the given cursor and updates component state.
-   * Re-created whenever `search`, `filter`, or `pageSize` changes.
+   * Tracks request timing and outcome via telemetry. Re-created whenever `search`,
+   * `filter`, or `pageSize` changes.
    *
    * @param afterCursor - Relay cursor marking the start of the page, or `null` for page 0.
    * @param pageIndex - Zero-based index of the page being loaded.
    */
   const fetchPage = useCallback(async (afterCursor: string | null, pageIndex: number) => {
     setState(s => ({ ...s, loading: true, error: null }));
+    const requestStart = new Date().toISOString();
+    const t0 = Date.now();
     try {
       const data = await gqlFetch(EMPLOYEES_QUERY, {
         first: pageSize,
         after: afterCursor,
         search: search || null,
         filter: filter ?? null,
+      });
+      track({
+        userId: DEFAULT_USER_ID,
+        event: 'api.employees.success',
+        context: 'useEmployees',
+        details: JSON.stringify({ page: pageIndex, pageSize, afterCursor, search: search || null, filter }),
+        requestStart,
+        requestDuration: Date.now() - t0,
+        requestStatus: 200,
       });
       const { edges, totalCount, pageInfo } = data.employees;
       setState({
@@ -183,9 +204,19 @@ export function useEmployees({ search, filter, pageSize = 5 }: UseEmployeesParam
         page: pageIndex,
       });
     } catch (err) {
-      setState(s => ({ ...s, loading: false, error: (err as Error).message }));
+      const errorMessage = (err as Error).message;
+      track({
+        userId: DEFAULT_USER_ID,
+        event: 'api.employees.error',
+        context: 'useEmployees',
+        details: JSON.stringify({ page: pageIndex, pageSize, afterCursor, search: search || null, filter }),
+        requestStart,
+        requestDuration: Date.now() - t0,
+        requestError: errorMessage,
+      });
+      setState(s => ({ ...s, loading: false, error: errorMessage }));
     }
-  }, [search, filter, pageSize]);
+  }, [search, filter, pageSize, track]);
 
   // Reset to page 0 whenever search / filter / pageSize changes
   useEffect(() => {

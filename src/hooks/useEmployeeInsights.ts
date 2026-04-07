@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
-import { parseApiError } from './apiError';
+import { DEFAULT_USER_ID } from '../constants';
+import { parseApiError } from './parseApiError.ts';
+import { useTelemetry } from './useTelemetry';
 
 const INSIGHTS_API_BASE = 'http://localhost:4000/api/ai/insights';
 
@@ -44,11 +46,18 @@ interface UseEmployeeInsightsResult {
  * Fetches AI-generated insights for a single employee.
  * Passes `consentToken` as the `x-consent-token` request header.
  * Re-fetches whenever `employeeId` or `consentToken` changes.
+ *
+ * **Telemetry**
+ * | Event | When | `details` |
+ * |---|---|---|
+ * | `api.insights.success` | Fetch succeeded | `{ employeeId, model, processingTimeMs }` |
+ * | `api.insights.error` | Fetch failed | `{ employeeId }` |
  */
 export function useEmployeeInsights(
   employeeId: string,
   consentToken: string | null,
 ): UseEmployeeInsightsResult {
+  const { track } = useTelemetry();
   const [insights, setInsights] = useState<EmployeeInsights | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -60,10 +69,14 @@ export function useEmployeeInsights(
     setLoading(true);
 
     async function fetchInsights() {
+      const requestStart = new Date().toISOString();
+      const t0 = Date.now();
+      let responseStatus: number | undefined;
       try {
         const res = await fetch(`${INSIGHTS_API_BASE}/${employeeId}`, {
           headers: { 'x-consent-token': consentToken! },
         });
+        responseStatus = res.status;
         if (!res.ok) {
           throw new Error(await parseApiError(res));
         }
@@ -71,12 +84,32 @@ export function useEmployeeInsights(
         if (data.summary) {
           data.summary = filterPiiInSummary(data.summary);
         }
+        track({
+          userId: DEFAULT_USER_ID,
+          event: 'api.insights.success',
+          context: 'useEmployeeInsights',
+          details: JSON.stringify({ employeeId, model: data.model, processingTimeMs: data.processingTimeMs }),
+          requestStart,
+          requestDuration: Date.now() - t0,
+          requestStatus: responseStatus,
+        });
         if (!cancelled) {
           setInsights(data);
         }
       } catch (err) {
+        const errorMessage = err instanceof Error ? err.message : 'Failed to load insights.';
+        track({
+          userId: DEFAULT_USER_ID,
+          event: 'api.insights.error',
+          context: 'useEmployeeInsights',
+          details: JSON.stringify({ employeeId }),
+          requestStart,
+          requestDuration: Date.now() - t0,
+          requestStatus: responseStatus,
+          requestError: errorMessage,
+        });
         if (!cancelled) {
-          setError(err instanceof Error ? err.message : 'Failed to load insights.');
+          setError(errorMessage);
         }
       } finally {
         if (!cancelled) {
@@ -87,7 +120,7 @@ export function useEmployeeInsights(
 
     fetchInsights();
     return () => { cancelled = true; };
-  }, [employeeId, consentToken]);
+  }, [employeeId, consentToken, track]);
 
   return { insights, loading, error };
 }
