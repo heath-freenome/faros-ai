@@ -77,10 +77,10 @@ export function EmployeeDetailPanel({ employee, onClose }: EmployeeDetailPanelPr
         </Typography>
         <Box sx={{ display: 'flex', gap: 0.25 }}>
           <IconButton size="small" sx={{ color: GRAY_400, '&:hover': { color: GRAY_700 } }}>
-            <OpenInNewIcon sx={{ fontSize: 16 }}/>
+            <OpenInNewIcon sx={{ fontSize: 16 }} />
           </IconButton>
           <IconButton size="small" onClick={onClose} sx={{ color: GRAY_400, '&:hover': { color: GRAY_700 } }}>
-            <CloseIcon sx={{ fontSize: 16 }}/>
+            <CloseIcon sx={{ fontSize: 16 }} />
           </IconButton>
         </Box>
       </Box>
@@ -97,7 +97,7 @@ export function EmployeeDetailPanel({ employee, onClose }: EmployeeDetailPanelPr
       {/* Scrollable content */}
       <Box sx={{ flex: 1, overflowY: 'auto', px: 3, pt: 2.5, pb: 2 }}>
         {showInsights && (
-          <InsightsSection employeeId={employee.id} consentToken={consentToken}/>
+          <InsightsSection employeeId={employee.id} consentToken={consentToken} />
         )}
 
         <Typography sx={{ fontSize: '0.875rem', fontWeight: 600, color: GRAY_900, mb: 2.5 }}>
@@ -123,10 +123,10 @@ export function EmployeeDetailPanel({ employee, onClose }: EmployeeDetailPanelPr
           {/* Title */}
           <Box>
             <FieldLabel>Title</FieldLabel>
-            <AddButton label="Add Title"/>
+            <AddButton label="Add Title" />
           </Box>
 
-          <Divider/>
+          <Divider />
 
           {/* Name */}
           <Box>
@@ -155,25 +155,25 @@ export function EmployeeDetailPanel({ employee, onClose }: EmployeeDetailPanelPr
           {/* Role */}
           <Box>
             <FieldLabel>Role</FieldLabel>
-            <AddButton label="Add Role"/>
+            <AddButton label="Add Role" />
           </Box>
 
           {/* Location */}
           <Box>
             <FieldLabel>Location</FieldLabel>
-            <AddButton label="Add Location"/>
+            <AddButton label="Add Location" />
           </Box>
 
           {/* Level */}
           <Box>
             <FieldLabel>Level</FieldLabel>
-            <AddButton label="Add Level"/>
+            <AddButton label="Add Level" />
           </Box>
 
           {/* Employment Type */}
           <Box>
             <FieldLabel>Employment Type</FieldLabel>
-            <AddButton label="Add Employment Type"/>
+            <AddButton label="Add Employment Type" />
           </Box>
         </Box>
       </Box>
