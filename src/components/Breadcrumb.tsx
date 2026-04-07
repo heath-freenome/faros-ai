@@ -1,12 +1,12 @@
 import type { ReactNode } from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import AddIcon from '@mui/icons-material/Add';
 
-import { WHITE, GRAY_400, GRAY_700, BLUE_600, BLUE_700 } from '../constants';
+import { GRAY_400, GRAY_700 } from '../constants';
+import { PrimaryButton } from '../styles/components';
 
 interface CrumbLinkProps {
   children: ReactNode;
@@ -58,28 +58,12 @@ export function Breadcrumb() {
         <LockOutlinedIcon sx={{ fontSize: 13, color: GRAY_400, ml: 0.75 }} />
       </Box>
 
-      {/* New button */}
-      <Button
-        variant="contained"
+      <PrimaryButton
         startIcon={<AddIcon sx={{ fontSize: '16px !important' }} />}
-        sx={{
-          backgroundColor: BLUE_600,
-          color: WHITE,
-          fontSize: '0.8125rem',
-          fontWeight: 500,
-          textTransform: 'none',
-          borderRadius: '6px',
-          px: 1.75,
-          py: 0.625,
-          boxShadow: 'none',
-          '&:hover': {
-            backgroundColor: BLUE_700,
-            boxShadow: 'none',
-          },
-        }}
+        sx={{ px: 1.75, py: 0.625 }}
       >
         New
-      </Button>
+      </PrimaryButton>
     </Box>
   );
 }

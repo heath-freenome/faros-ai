@@ -19,7 +19,7 @@ import { SkeletonRow } from './SkeletonRow';
 import type { Employee } from '../types';
 import {
   WHITE, GRAY_50, GRAY_200, GRAY_300, GRAY_400, GRAY_700, GRAY_900,
-  BLUE_50, BLUE_600,
+  BLUE_50,
 } from '../constants';
 
 // ── Sticky column sx helpers ───────────────────────────────────────────────
@@ -74,7 +74,6 @@ export function TableData({
                 indeterminate={someSelected}
                 checked={allSelected}
                 onChange={onSelectAll}
-                sx={{ color: GRAY_300, '&.Mui-checked, &.MuiCheckbox-indeterminate': { color: BLUE_600 } }}
               />
             </TableCell>
 
@@ -126,14 +125,13 @@ export function TableData({
                         size="small"
                         checked={selected.has(emp.id)}
                         onChange={() => onSelectOne(emp.id)}
-                        sx={{ color: GRAY_300, '&.Mui-checked': { color: BLUE_600 } }}
                       />
                     </TableCell>
 
                     {/* Name — sticky left */}
                     <TableCell sx={{ width: 220, minWidth: 220, ...(isViewingEmployee ? STICKY_COL_2 : undefined) }}>
                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.25 }}>
-                        <Avatar src={emp.photoUrl} alt={emp.name} sx={{ width: 32, height: 32, fontSize: '0.8rem', flexShrink: 0 }}>
+                        <Avatar src={emp.photoUrl} alt={emp.name} sx={{ flexShrink: 0 }}>
                           {emp.name?.[0]?.toUpperCase()}
                         </Avatar>
                         <Box>

@@ -12,12 +12,12 @@ import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import type { Employee } from '../types';
 import {
   WHITE, GRAY_200, GRAY_400, GRAY_500, GRAY_700, GRAY_900,
-  BLUE_600, BLUE_700,
   ENABLE_AI_EMPLOYEE_INSIGHTS, OPT_OUT_TOKEN,
 } from '../constants';
 import { useFeatureFlag } from '../context/FeatureFlags';
 import { useConsent } from '../context/ConsentContext';
 import { fieldInputSx } from '../styles/fieldInputSx';
+import { PrimaryButton } from '../styles/components';
 import { FieldLabel } from './FieldLabel';
 import { AddButton } from './AddButton';
 import { StatusChooser } from './StatusChooser';
@@ -125,7 +125,7 @@ export function EmployeeDetailPanel({ employee, onClose }: EmployeeDetailPanelPr
             <AddButton label="Add Title" />
           </Box>
 
-          <Divider sx={{ borderColor: GRAY_200 }} />
+          <Divider />
 
           {/* Name */}
           <Box>
@@ -189,32 +189,13 @@ export function EmployeeDetailPanel({ employee, onClose }: EmployeeDetailPanelPr
           flexShrink: 0,
         }}
       >
-        <Button
-          variant="contained"
-          size="small"
-          sx={{
-            backgroundColor: BLUE_600,
-            color: WHITE,
-            fontSize: '0.8125rem',
-            fontWeight: 500,
-            textTransform: 'none',
-            borderRadius: '6px',
-            px: 2,
-            py: 0.625,
-            boxShadow: 'none',
-            '&:hover': { backgroundColor: BLUE_700, boxShadow: 'none' },
-          }}
-        >
-          Save
-        </Button>
+        <PrimaryButton sx={{ px: 2, py: 0.625 }}>Save</PrimaryButton>
         <Button
           size="small"
           onClick={onClose}
           sx={{
             color: GRAY_700,
             fontSize: '0.8125rem',
-            fontWeight: 500,
-            textTransform: 'none',
             '&:hover': { backgroundColor: 'transparent', color: GRAY_900 },
           }}
         >

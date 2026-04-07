@@ -2,7 +2,7 @@ import { createTheme } from '@mui/material/styles';
 
 import {
   WHITE, BRAND_NAVY_DARK, BRAND_NAVY, BRAND_NAVY_LIGHT, BRAND_ORANGE,
-  GRAY_50, GRAY_50_COOL, GRAY_200, GRAY_300, GRAY_400, GRAY_500, GRAY_900,
+  GRAY_50, GRAY_50_COOL, GRAY_200, GRAY_300, GRAY_400, GRAY_500, GRAY_700, GRAY_900,
   GREEN_100, GREEN_600, GREEN_700,
   RED_600,
   AMBER_100, AMBER_600,
@@ -74,6 +74,14 @@ export const theme = createTheme({
         },
       },
     },
+    MuiCheckbox: {
+      styleOverrides: {
+        root: {
+          color: GRAY_300,
+          '&.Mui-checked, &.MuiCheckbox-indeterminate': { color: BLUE_600 },
+        },
+      },
+    },
     MuiChip: {
       styleOverrides: {
         root: {
@@ -81,6 +89,15 @@ export const theme = createTheme({
           fontWeight: 500,
           fontSize: '0.75rem',
           height: 22,
+        },
+      },
+    },
+    MuiAvatar: {
+      styleOverrides: {
+        root: {
+          width: 32,
+          height: 32,
+          fontSize: '0.8rem',
         },
       },
     },
@@ -103,20 +120,14 @@ export const theme = createTheme({
     MuiTableRow: {
       styleOverrides: {
         root: {
-          '&:hover': {
-            backgroundColor: GRAY_50,
-          },
-          '&:last-child td': {
-            borderBottom: 0,
-          },
+          '&:hover': { backgroundColor: GRAY_50 },
+          '&:last-child td': { borderBottom: 0 },
         },
       },
     },
     MuiInputBase: {
       styleOverrides: {
-        root: {
-          fontSize: '0.875rem',
-        },
+        root: { fontSize: '0.875rem' },
       },
     },
     MuiOutlinedInput: {
@@ -124,25 +135,51 @@ export const theme = createTheme({
         root: {
           borderRadius: 8,
           backgroundColor: WHITE,
-          '& fieldset': {
-            borderColor: GRAY_300,
-          },
-          '&:hover fieldset': {
-            borderColor: GRAY_400,
-          },
-          '&.Mui-focused fieldset': {
-            borderColor: BRAND_NAVY,
-          },
+          '& fieldset': { borderColor: GRAY_300 },
+          '&:hover fieldset': { borderColor: GRAY_400 },
+          '&.Mui-focused fieldset': { borderColor: BRAND_NAVY },
         },
-        input: {
-          padding: '8px 12px',
-        },
+        input: { padding: '8px 12px' },
       },
     },
     MuiSelect: {
       styleOverrides: {
-        select: {
-          padding: '8px 12px',
+        select: { padding: '8px 12px' },
+      },
+    },
+    MuiPopover: {
+      defaultProps: { elevation: 2 },
+      styleOverrides: {
+        paper: {
+          borderRadius: '8px',
+          border: `1px solid ${GRAY_200}`,
+          overflow: 'hidden',
+        },
+      },
+    },
+    MuiDialog: {
+      styleOverrides: {
+        paper: {
+          borderRadius: '10px',
+          border: `1px solid ${GRAY_200}`,
+        },
+      },
+    },
+    MuiDialogTitle: {
+      styleOverrides: {
+        root: {
+          fontWeight: 600,
+          fontSize: '1rem',
+          color: GRAY_900,
+          paddingBottom: 8,
+        },
+      },
+    },
+    MuiDialogContentText: {
+      styleOverrides: {
+        root: {
+          fontSize: '0.875rem',
+          color: GRAY_700,
         },
       },
     },

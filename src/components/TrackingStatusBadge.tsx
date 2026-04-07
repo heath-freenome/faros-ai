@@ -42,7 +42,6 @@ export function TrackingStatusBadge({ status, category }: TrackingStatusBadgePro
           size="small"
           sx={{
             ...statusStyle,
-            fontWeight: 500,
             fontSize: '0.7rem',
             height: 20,
             alignSelf: 'flex-start',
@@ -55,7 +54,6 @@ export function TrackingStatusBadge({ status, category }: TrackingStatusBadgePro
           size="small"
           sx={{
             ...categoryStyle,
-            fontWeight: 500,
             fontSize: '0.7rem',
             height: 20,
             alignSelf: 'flex-start',

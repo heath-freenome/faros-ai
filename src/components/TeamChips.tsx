@@ -69,10 +69,7 @@ export function TeamChips({ teams }: TeamChipsProps) {
             sx={{
               backgroundColor: bg,
               color,
-              fontWeight: 500,
               fontSize: '0.7rem',
-              height: 22,
-              borderRadius: '4px',
               '& .MuiChip-label': { px: 1 },
             }}
           />

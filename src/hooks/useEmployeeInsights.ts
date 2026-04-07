@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { parseApiError } from './apiError';
 
 const INSIGHTS_API_BASE = 'http://localhost:4000/api/ai/insights';
 
@@ -47,7 +48,7 @@ export function useEmployeeInsights(
         const res = await fetch(`${INSIGHTS_API_BASE}/${employeeId}`, {
           headers: { 'x-consent-token': consentToken! },
         });
-        if (!res.ok) throw new Error(`Request failed: ${res.status}`);
+        if (!res.ok) throw new Error(await parseApiError(res));
         const data = await res.json() as EmployeeInsights;
         if (data.summary) data.summary = filterPiiInSummary(data.summary);
         if (!cancelled) setInsights(data);

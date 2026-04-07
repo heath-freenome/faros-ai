@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 
 import type { FilterOptions } from '../types';
+import { parseApiError } from './apiError';
 
 const GQL_ENDPOINT = 'http://localhost:4000/graphql';
 
@@ -33,8 +34,11 @@ export function useFilterOptions(): UseFilterOptionsResult {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ query: FILTER_OPTIONS_QUERY }),
     })
-      .then(r => r.json())
-      .then((json: { errors?: { message: string }[]; data: { filterOptions: FilterOptions } }) => {
+      .then(async r => {
+        if (!r.ok) throw new Error(await parseApiError(r));
+        return r.json() as Promise<{ errors?: { message: string }[]; data: { filterOptions: FilterOptions } }>;
+      })
+      .then(json => {
         if (cancelled) return;
         if (json.errors?.length) throw new Error(json.errors[0].message);
         setOptions(json.data.filterOptions);

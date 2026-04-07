@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 
 import type { Employee, PageInfo, ApiFilter } from '../types';
+import { parseApiError } from './apiError';
 
 const GQL_ENDPOINT = 'http://localhost:4000/graphql';
 
@@ -27,7 +28,7 @@ async function gqlFetch(query: string, variables: GqlVariables): Promise<GqlData
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ query, variables }),
   });
-  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  if (!res.ok) throw new Error(await parseApiError(res));
   const json: { errors?: { message: string }[]; data: GqlData } = await res.json();
   if (json.errors?.length) throw new Error(json.errors[0].message);
   return json.data;
