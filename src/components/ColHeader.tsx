@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import type { PropsWithChildren } from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import SouthOutlinedIcon from '@mui/icons-material/SouthOutlined';
@@ -6,8 +6,7 @@ import SouthOutlinedIcon from '@mui/icons-material/SouthOutlined';
 import {GRAY_400, GRAY_500, SKY_300 } from '../constants';
 
 /** Props for `ColHeader`. */
-interface ColHeaderProps {
-  children: ReactNode;
+interface ColHeaderProps extends PropsWithChildren {
   /** Shows a sort icon when true. */
   sortable?: boolean;
   /** Highlights the sort icon in sky-blue when true (indicates active sort). */
