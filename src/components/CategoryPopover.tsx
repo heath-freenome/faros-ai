@@ -31,6 +31,7 @@ interface CategoryPopoverProps {
   anchorEl: HTMLElement | null;
   /** Filter keys checked in the current (uncommitted) selection. */
   pendingTypes: FilterKey[];
+  /** Called to set the pending types */
   setPendingTypes: Dispatch<SetStateAction<FilterKey[]>>;
   /** Called when the user clicks Apply. */
   onApply: () => void;
