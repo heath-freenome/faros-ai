@@ -13,6 +13,8 @@ export interface ConsentState {
 
 /** Value exposed by `ConsentContext`. */
 interface ConsentContextValue extends ConsentState {
+  /** Unique identifier for the current browser tab session, stable for its lifetime. */
+  sessionId: string;
   /** Record consent granted via the API — stores both token and expiry. */
   setConsent: (token: string, expiresAt: string) => void;
   /** Store a token without an expiry date, used for the opt-out sentinel path. */
@@ -21,8 +23,25 @@ interface ConsentContextValue extends ConsentState {
 
 // ── Storage keys ───────────────────────────────────────────────────────────
 
-const TOKEN_KEY   = 'ai_employee_insights_consent';
-const EXPIRY_KEY  = 'ai_employee_insights_consent_expires_at';
+const TOKEN_KEY      = 'ai_employee_insights_consent';
+const EXPIRY_KEY     = 'ai_employee_insights_consent_expires_at';
+const SESSION_ID_KEY = 'ai_employee_insights_session_id';
+
+/**
+ * Returns the session ID for the current browser tab.
+ * Reads the existing ID from sessionStorage if one was already generated this session,
+ * otherwise creates a new UUID, persists it, and returns it.
+ * Because sessionStorage is scoped to the tab, each new tab starts a fresh session.
+ */
+function loadSessionId(): string {
+  const existing = sessionStorage.getItem(SESSION_ID_KEY);
+  if (existing) {
+    return existing;
+  }
+  const newId = crypto.randomUUID();
+  sessionStorage.setItem(SESSION_ID_KEY, newId);
+  return newId;
+}
 
 /** Reads the current consent state from sessionStorage, returning nulls when absent. */
 function loadState(): ConsentState {
@@ -53,6 +72,7 @@ const ConsentContext = createContext<ConsentContextValue | null>(null);
 
 /** Provides AI-insights consent state to the subtree and persists it in sessionStorage. */
 export function ConsentProvider({ children }: { children: ReactNode }) {
+  const [sessionId] = useState<string>(loadSessionId);
   const [state, setState] = useState<ConsentState>(loadState);
 
   function setConsent(token: string, expiresAt: string) {
@@ -66,7 +86,7 @@ export function ConsentProvider({ children }: { children: ReactNode }) {
   }
 
   return (
-    <ConsentContext.Provider value={{ ...state, setConsent, setConsentToken }}>
+    <ConsentContext.Provider value={{ ...state, sessionId, setConsent, setConsentToken }}>
       {children}
     </ConsentContext.Provider>
   );

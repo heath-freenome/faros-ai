@@ -85,6 +85,18 @@ export function useFeatureFlag(name: string): boolean {
 }
 
 /**
+ * Returns the current snapshot of all feature flags as a plain object.
+ * Unknown flags are absent from the map and should be treated as `false`.
+ */
+export function useFeatureFlags(): FlagMap {
+  const ctx = useContext(FeatureFlagContext);
+  if (!ctx) {
+    throw new Error('useFeatureFlags must be used within a FeatureFlagProvider');
+  }
+  return ctx.flags;
+}
+
+/**
  * Returns the setFlag function for programmatically toggling flags.
  * Useful in dev tooling or settings panels.
  */

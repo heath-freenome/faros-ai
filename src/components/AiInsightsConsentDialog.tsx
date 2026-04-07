@@ -11,7 +11,7 @@ import Alert from '@mui/material/Alert';
 
 import { useConsent } from '../context/ConsentContext';
 import { DEFAULT_USER_ID, GRAY_700, GRAY_900, OPT_OUT_TOKEN, WHITE } from '../constants';
-import { parseApiError } from '../hooks/apiError.ts';
+import { parseApiError } from '../hooks/parseApiError.ts';
 import { PrimaryButton } from '../styles/components';
 
 const CONSENT_API = 'http://localhost:4000/api/ai/consent';
