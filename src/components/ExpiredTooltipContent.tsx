@@ -22,7 +22,7 @@ export function ExpiredTooltipContent({ onReconsent }: ExpiredTooltipContentProp
         </Typography>
       </Box>
       <Typography sx={{ fontSize: '0.75rem', lineHeight: 1.5, opacity: 0.9 }}>
-        Your AI employee insights consent has expired. Click to redo consent and continue
+        Your AI employee insights consent has expired. Click to update your consent and continue
         using this feature.
       </Typography>
       <Typography
@@ -37,7 +37,7 @@ export function ExpiredTooltipContent({ onReconsent }: ExpiredTooltipContentProp
           '&:hover': { opacity: 1 },
         }}
       >
-        Redo consent
+        Update consent
       </Typography>
     </Box>
   );

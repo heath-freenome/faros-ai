@@ -13,7 +13,7 @@ Node 24
 5. Start the application: `npm run dev` and open your browser to http://localhost:5174/
 6. Have fun!
 
-> NOTE: Since I used Material UI and it's icons I picked the closest icons from their palette for the ones in the Figma design, so icon-wise it is not pixel-perfect
+> NOTE: Since I used Material UI components and icons, I picked the closest icons from their palette for the ones used in the Figma design, so icon-wise it is not pixel-perfect. Also the fonts may not be exact matches either.
 
 ## Enabling/disabling the feature flag
 
