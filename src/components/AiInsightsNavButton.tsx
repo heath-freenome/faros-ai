@@ -70,8 +70,8 @@ export function AiInsightsNavButton() {
         open={tooltipOpen || expired}
         title={
           expired
-            ? <ExpiredTooltipContent onReconsent={openDialog}/>
-            : <InsightsTooltipContent onClose={closeTooltip}/>
+            ? <ExpiredTooltipContent onReconsent={openDialog} />
+            : <InsightsTooltipContent onClose={closeTooltip} />
         }
         placement="bottom"
         arrow
@@ -80,14 +80,14 @@ export function AiInsightsNavButton() {
         <span>
           <SquareIconButton onClick={openDialog}>
             {consentGranted && !expired
-              ? <AutoAwesomeIcon sx={{ fontSize: 18, color: BLUE_600 }}/>
-              : <AutoAwesomeOutlinedIcon sx={{ fontSize: 18 }}/>
+              ? <AutoAwesomeIcon sx={{ fontSize: 18, color: BLUE_600 }} />
+              : <AutoAwesomeOutlinedIcon sx={{ fontSize: 18 }} />
             }
           </SquareIconButton>
         </span>
       </Tooltip>
 
-      <AiInsightsConsentDialog open={dialogOpen} onClose={closeDialog}/>
+      <AiInsightsConsentDialog open={dialogOpen} onClose={closeDialog} />
     </>
   );
 }

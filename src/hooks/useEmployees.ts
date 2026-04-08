@@ -2,10 +2,11 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 
 import type { Employee, PageInfo, ApiFilter } from '../types';
 import { DEFAULT_USER_ID } from '../constants';
+import { getApiBaseUrl } from '../config';
 import { parseApiError } from './parseApiError.ts';
 import { useTelemetry } from './useTelemetry';
 
-const GQL_ENDPOINT = 'http://localhost:4000/graphql';
+const GQL_ENDPOINT = `${getApiBaseUrl()}/graphql`;
 
 /** Variables passed to the `GetEmployees` GraphQL query. */
 interface GqlVariables {

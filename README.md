@@ -1,73 +1,33 @@
-# React + TypeScript + Vite
+# Faros AI Takehome project
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Prerequisites
 
-Currently, two official plugins are available:
+Node 24
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Setting up the project
 
-## React Compiler
+1. First you will want to clone the repository: `git clone https://github.com/heath-freenome/faros-ai.git`
+2. Then setup the node environment using: `npm install`
+3. If your Faros API server is not running locally on `http://localhost:4000`, modify `.env.local` to update the `VITE_FAROS_API_BASE_URL` environment variable to the correct url
+4. Now build the application using: `npm run build`
+5. Start the application: `npm run dev` and open your browser to http://localhost:5174/
+6. Have fun!
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+> NOTE: Since I used Material UI and it's icons I picked the closest icons from their palette for the ones in the Figma design, so icon-wise it is not pixel-perfect
 
-## Expanding the ESLint configuration
+## Enabling/disabling the feature flag
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+By default, the AI Employee Insights feature is disabled. To turn on the feature, open the Inspector feature on your browser and go to the console tab.
+To enable the feature flag, execute the following line in the console:
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```
+localStorage.setItem('feature_flags', JSON.stringify({ 'enable-ai-employee-insights': true }))
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+To disable the feature flag execute the following line in the console:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
 ```
+localStorage.setItem('feature_flags', JSON.stringify({ 'enable-ai-employee-insights': false }))
+```
+
+> NOTE: You may have to enable support for pasting into the console if your browser does not have that feature turned on

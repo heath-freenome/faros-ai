@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
 import { DEFAULT_USER_ID } from '../constants';
+import { getApiBaseUrl } from '../config';
 import { parseApiError } from './parseApiError.ts';
 import { useTelemetry } from './useTelemetry';
 
-const INSIGHTS_API_BASE = 'http://localhost:4000/api/ai/insights';
+const INSIGHTS_API_BASE = `${getApiBaseUrl()}/api/ai/insights`;
 
 /** AI-generated insight payload returned by the insights API. */
 export interface EmployeeInsights {

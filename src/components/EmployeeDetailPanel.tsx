@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { ChangeEvent } from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
@@ -12,10 +12,11 @@ import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import type { Employee } from '../types';
 import {
   WHITE, GRAY_200, GRAY_400, GRAY_500, GRAY_700, GRAY_900,
-  ENABLE_AI_EMPLOYEE_INSIGHTS, OPT_OUT_TOKEN,
+  DEFAULT_USER_ID, ENABLE_AI_EMPLOYEE_INSIGHTS, OPT_OUT_TOKEN,
 } from '../constants';
 import { useFeatureFlag } from '../context/FeatureFlags';
 import { isConsentExpired, useConsent } from '../context/ConsentContext';
+import { useTelemetry } from '../hooks/useTelemetry';
 import { fieldInputSx } from '../styles/fieldInputSx';
 import { PrimaryButton } from '../styles/components';
 import { FieldLabel } from './FieldLabel';
@@ -38,6 +39,11 @@ interface EmployeeDetailPanelProps {
 /**
  * Slide-in side panel that displays editable profile fields for a single employee.
  * Shows the AI insights section when the feature flag is enabled and consent is active.
+ *
+ * **Telemetry**
+ * | Event | When | `details` |
+ * |---|---|---|
+ * | `employee.viewed` | Panel opens or the viewed employee changes | `{ employeeId, employeeUid, trackingStatus, trackingCategory }` |
  */
 export function EmployeeDetailPanel({ employee, onClose }: EmployeeDetailPanelProps) {
   const [name, setName] = useState(employee.name);
@@ -45,8 +51,23 @@ export function EmployeeDetailPanel({ employee, onClose }: EmployeeDetailPanelPr
   const [trackingStatus, setTrackingStatus] = useState(employee.trackingStatus);
   const [trackingCategory, setTrackingCategory] = useState(employee.trackingCategory);
 
+  const { track } = useTelemetry();
   const aiInsightsEnabled = useFeatureFlag(ENABLE_AI_EMPLOYEE_INSIGHTS);
   const { consentToken, expiresAt } = useConsent();
+
+  useEffect(() => {
+    track({
+      userId: DEFAULT_USER_ID,
+      event: 'employee.viewed',
+      context: 'EmployeeDetailPanel',
+      details: JSON.stringify({
+        employeeId: employee.id,
+        employeeUid: employee.uid,
+        trackingStatus: employee.trackingStatus,
+        trackingCategory: employee.trackingCategory,
+      }),
+    });
+  }, [employee.id]); // eslint-disable-line react-hooks/exhaustive-deps
   const showInsights =
     aiInsightsEnabled && consentToken !== null && consentToken !== OPT_OUT_TOKEN && !isConsentExpired(expiresAt);
 
