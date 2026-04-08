@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import type { ReactNode } from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
@@ -39,8 +40,17 @@ function CrumbSep() {
  * Page breadcrumb bar for the Employees page.
  * Hard-coded to "Admin Settings > Organization Setup > Employees Page" with a
  * primary "New" action button on the right.
+ *
+ * The "New" button intentionally throws a render error to demonstrate the
+ * `ErrorBoundary` fallback UI and problem ID behavior.
  */
 export function Breadcrumb() {
+  const [triggerError, setTriggerError] = useState(false);
+
+  if (triggerError) {
+    throw new Error('New employee creation is not yet implemented.');
+  }
+
   return (
     <Box
       sx={{
@@ -69,6 +79,7 @@ export function Breadcrumb() {
       <PrimaryButton
         startIcon={<AddIcon sx={{ fontSize: '16px !important' }} />}
         sx={{ px: 1.75, py: 0.625 }}
+        onClick={() => setTriggerError(true)}
       >
         New
       </PrimaryButton>
