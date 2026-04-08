@@ -18,6 +18,8 @@
 - I made the assumption that the Employee Details Panel would not be fully functional since the requirements didn't mention updating/saving user details
 - I made the assumption that the Table column sorting would not function since the requirements didn't mention that
   - Moreover, it wasn't clear to me how I would use the API to change the sorting
+- As for Telemetry, I came up with what I feel was a reasonable set of things to monitor for the project
+  - I can imagine there could be many more things to track depending on whether Faros uses telemetry as a replacement for something google analytics or as an addition to it; How does Faros use it?
 
 # AI Development Environment and workflow
 
@@ -34,6 +36,7 @@
     - If I had more time I likely would have added more styled components, using `sx` a minimally as possible
 - Overall Claude did a good job of using Material UI, of analyzing the graphQL API to come up with the appropriate `useEmployees` and `useFilterOptions` hooks without my having to strongly dictate how it built things
   - I likely would have done something similar on my own, only I likely would have first built the API calls using `useEffect`s and later realized hooks would be better, so Claude saved me a step
+  - Later, I had Claude add additional hooks for the AI insights and telemetry APIs
 - Initially, Claude barely generated any documentation in the components
   - It took a few iterations of instructing Claude to add documentation to components, functions, interfaces and props
   - Even then there were a few I just added manually while reviewing the code, since they were missing
