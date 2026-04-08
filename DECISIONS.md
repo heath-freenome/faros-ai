@@ -10,9 +10,10 @@
 - For storing consent tokens, I asked Claude to build me a solution based on session storage since the token expires quickly and the user may want to only use it in some browsers
   - Bonus, it easily allows the user to see what happens when a new feature is turned on for which they haven't seen yet (if they haven't opted out a tooltip should show up letting them know about the feature)
   - If this were a real product, I would probably store the token in the user's profile, checking that to see if they opted out or not from there
-- OOTB Claude used local state for storing data in React components
-  - I instructed it to use Contexts for the feature flags and consent capabilities
-  - I also had it refactor the `EmployeesPage` to use the reducer pattern instead of a large number of individual state elements
+  - I also piggy-backed on the consent context to add support for a unique sessionId that is used by telemetry; Ideally this would come from an authentication service's cookie
+- OOTB Claude used `useState` hooks for storing data in React components
+  - I instructed it to use React Contexts for the feature flags and consent capabilities
+  - I also had it refactor the `EmployeesPage` to use the `useReducer` pattern for state instead of a large number of individual `useState` elements
 - While I have used MobX to design serializable data stores in the past, Claude's choice to use a hook approach to making API calls seemed good enough for now
   - If I were building this with SSR, I likely would have instructed Claude to come up with a mechanism similar to what I have used in the past, or at least asked it what it would suggest,= 
 - I made the assumption that the Employee Details Panel would not be fully functional since the requirements didn't mention updating/saving user details
@@ -22,6 +23,8 @@
   - I can imagine there could be many more things to track depending on whether Faros uses telemetry as a replacement for something google analytics or as an addition to it; How does Faros use it?
 
 # AI Development Environment and workflow
+
+In addition to my mentions of Claude in the previous section, here I go into more details about how I used it:
 
 - I used Claude Code with a Pro license (I'm still waiting for my OSS Max license to be granted to me)
   - I installed the Claude Code plugin for IntelliJ IDEA, the IDE I have been all of my development in for the last 2 decades
