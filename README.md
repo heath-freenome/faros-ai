@@ -31,3 +31,5 @@ localStorage.setItem('feature_flags', JSON.stringify({ 'enable-ai-employee-insig
 ```
 
 > NOTE: You may have to enable support for pasting into the console if your browser does not have that feature turned on
+
+After toggling the feature flag, refresh the browser so that the application picks it up.
