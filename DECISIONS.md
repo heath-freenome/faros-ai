@@ -78,6 +78,8 @@ In addition to my mentions of Claude in the previous section, here I go into mor
 
 - I would likely build an better API handling layer that encapsulates error handling, telemetry tracking and error reporting to the User in a much more centralized place
   - This could involve using a data store layer based on something like MobX, where the UI could register an API error handling function that display errors in via a SnackBar or InfoBar
+  - The layer could also attempt an auto-retry for certain HTTP statuses that indicate a potentially temporary outage like 408, 409, 500, 502, 503, 504, etc. 
+  - Another improvement would be for the telemetry tracking to queue up requests that failed to send due to a service outage and attempt to send them again (in order) once the service is available again
 - Add 100% unit testing for all components, hooks and helper functions using Vitest and React Testing Library using mocks for APIs and contexts defined outside of the internals of the component
 - Ensure authentication existed; Having a production system without authentication is never a good idea
   - Ensure all the APIs only worked with authenticated users
