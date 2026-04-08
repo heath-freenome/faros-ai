@@ -27,7 +27,7 @@ export function PageLoadTelemetry() {
       userId: DEFAULT_USER_ID,
       event: 'page.load',
       context: 'App',
-      details: JSON.stringify({ flags, aiConsentGranted, aiConsentActive }),
+      details: JSON.stringify({ flags, aiConsentGranted, aiConsentActive, aiConsentExpiry: expiresAt }),
     });
     // Intentionally omitting `flags` and `track` from deps — this must fire
     // exactly once on mount with the initial flag snapshot.

@@ -1,8 +1,9 @@
 import { useCallback } from 'react';
 
 import { useConsent } from '../context/ConsentContext';
+import { getApiBaseUrl } from '../config';
 
-const TELEMETRY_ENDPOINT = 'http://localhost:4000/api/telemetry';
+const TELEMETRY_ENDPOINT = `${getApiBaseUrl()}/api/telemetry`;
 
 // ── Helpers ────────────────────────────────────────────────────────────────
 

@@ -2,10 +2,11 @@ import { useState, useEffect } from 'react';
 
 import type { FilterOptions } from '../types';
 import { DEFAULT_USER_ID } from '../constants';
+import { getApiBaseUrl } from '../config';
 import { parseApiError } from './parseApiError.ts';
 import { useTelemetry } from './useTelemetry';
 
-const GQL_ENDPOINT = 'http://localhost:4000/graphql';
+const GQL_ENDPOINT = `${getApiBaseUrl()}/graphql`;
 
 /**
  * GraphQL query that fetches all available filter dimension values in a single request.

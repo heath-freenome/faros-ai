@@ -11,10 +11,12 @@ import Alert from '@mui/material/Alert';
 
 import { useConsent } from '../context/ConsentContext';
 import { DEFAULT_USER_ID, GRAY_700, GRAY_900, OPT_OUT_TOKEN, WHITE } from '../constants';
+import { getApiBaseUrl } from '../config';
 import { parseApiError } from '../hooks/parseApiError.ts';
+import { useTelemetry } from '../hooks/useTelemetry';
 import { PrimaryButton } from '../styles/components';
 
-const CONSENT_API = 'http://localhost:4000/api/ai/consent';
+const CONSENT_API = `${getApiBaseUrl()}/api/ai/consent`;
 
 /** Internal state for the feedback snackbar shown after a consent action. */
 interface SnackbarState {
@@ -56,9 +58,17 @@ interface AiInsightsConsentDialogProps {
  * On "Yes", POSTs to the consent API and stores the returned token + expiry.
  * On "No", stores the opt-out sentinel token.
  * In both cases a confirmation snackbar is shown after the dialog closes.
+ *
+ * **Telemetry**
+ * | Event | When | `details` |
+ * |---|---|---|
+ * | `api.consent.success` | Consent granted via API | `{ scope, expiresAt }` |
+ * | `api.consent.error` | Consent API call failed | `{ scope }` |
+ * | `consent.optOut` | User clicked No | — |
  */
 export function AiInsightsConsentDialog({ open, onClose }: AiInsightsConsentDialogProps) {
   const { setConsent, setConsentToken } = useConsent();
+  const { track } = useTelemetry();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [snackbar, setSnackbar] = useState<SnackbarState>(SNACKBAR_CLOSED);
@@ -70,16 +80,29 @@ export function AiInsightsConsentDialog({ open, onClose }: AiInsightsConsentDial
   async function handleYes() {
     setLoading(true);
     setError(null);
+    const requestStart = new Date().toISOString();
+    const t0 = Date.now();
+    let responseStatus: number | undefined;
     try {
       const res = await fetch(CONSENT_API, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ userId: DEFAULT_USER_ID, scope: 'insights' }),
       });
+      responseStatus = res.status;
       if (!res.ok) {
         throw new Error(await parseApiError(res));
       }
       const data = await res.json() as { consentToken: string; expiresAt: string };
+      track({
+        userId: DEFAULT_USER_ID,
+        event: 'api.consent.success',
+        context: 'AiInsightsConsentDialog',
+        details: JSON.stringify({ scope: 'insights', expiresAt: data.expiresAt }),
+        requestStart,
+        requestDuration: Date.now() - t0,
+        requestStatus: responseStatus,
+      });
       setConsent(data.consentToken, data.expiresAt);
       onClose?.();
       setSnackbar({
@@ -88,7 +111,18 @@ export function AiInsightsConsentDialog({ open, onClose }: AiInsightsConsentDial
         message: `AI employee insights enabled. Consent expires ${formatExpiry(data.expiresAt)}.`,
       });
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An unexpected error occurred.');
+      const errorMessage = err instanceof Error ? err.message : 'An unexpected error occurred.';
+      track({
+        userId: DEFAULT_USER_ID,
+        event: 'api.consent.error',
+        context: 'AiInsightsConsentDialog',
+        details: JSON.stringify({ scope: 'insights' }),
+        requestStart,
+        requestDuration: Date.now() - t0,
+        requestStatus: responseStatus,
+        requestError: errorMessage,
+      });
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -96,6 +130,11 @@ export function AiInsightsConsentDialog({ open, onClose }: AiInsightsConsentDial
 
   /** Stores the opt-out sentinel token and closes the dialog without an API call. */
   function handleNo() {
+    track({
+      userId: DEFAULT_USER_ID,
+      event: 'consent.optOut',
+      context: 'AiInsightsConsentDialog',
+    });
     setConsentToken(OPT_OUT_TOKEN);
     onClose?.();
     setSnackbar({
