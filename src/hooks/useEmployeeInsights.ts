@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { DEFAULT_USER_ID } from '../constants';
 import { getApiBaseUrl } from '../config';
 import { parseApiError } from './parseApiError.ts';
@@ -41,6 +41,8 @@ interface UseEmployeeInsightsResult {
   loading: boolean;
   /** Human-readable error message if the fetch failed, otherwise null. */
   error: string | null;
+  /** Re-runs the fetch for the current employee without changing any other state. */
+  retry: () => void;
 }
 
 /**
@@ -62,6 +64,10 @@ export function useEmployeeInsights(
   const [insights, setInsights] = useState<EmployeeInsights | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [retryCount, setRetryCount] = useState(0);
+
+  /** Increments the retry counter, triggering the fetch effect to re-run. */
+  const retry = useCallback(() => setRetryCount(c => c + 1), []);
 
   useEffect(() => {
     let cancelled = false;
@@ -121,7 +127,7 @@ export function useEmployeeInsights(
 
     fetchInsights();
     return () => { cancelled = true; };
-  }, [employeeId, consentToken, track]);
+  }, [employeeId, consentToken, track, retryCount]);
 
-  return { insights, loading, error };
+  return { insights, loading, error, retry };
 }

@@ -2,11 +2,11 @@ import { useState } from 'react';
 import type { ReactNode } from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import ContactPageOutlinedIcon from '@mui/icons-material/ContactPageOutlined';
 import AddIcon from '@mui/icons-material/Add';
 
-import { GRAY_400, GRAY_700 } from '../constants';
+import { GRAY_400, GRAY_500, GRAY_700 } from '../constants';
 import { PrimaryButton } from '../styles/components';
 
 /** Props for `CrumbLink`. */
@@ -73,7 +73,7 @@ export function Breadcrumb() {
         >
           Employees Page
         </Typography>
-        <LockOutlinedIcon sx={{ fontSize: 13, color: GRAY_400, ml: 0.75 }} />
+        <ContactPageOutlinedIcon sx={{ fontSize: 18, color: GRAY_500, ml: 0.75 }} />
       </Box>
 
       <PrimaryButton

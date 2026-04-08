@@ -133,6 +133,8 @@ interface UseEmployeesResult extends EmployeesState {
   goNext: () => void;
   /** Navigate to the previous page. No-op if on the first page. */
   goPrev: () => void;
+  /** Re-fetches the current page using the same cursor, search, and filter. */
+  retry: () => void;
   /** True when there is a previous page to navigate to. */
   hasPrev: boolean;
   /** True when there is a next page to navigate to. */
@@ -247,6 +249,11 @@ export function useEmployees({ search, filter, pageSize = 5 }: UseEmployeesParam
     fetchPage(cursorHistory.current[prevPage], prevPage);
   }, [state.page, fetchPage]);
 
+  /** Re-fetches the current page using the same cursor position, search, and filter. */
+  const retry = useCallback(() => {
+    fetchPage(cursorHistory.current[state.page], state.page);
+  }, [fetchPage, state.page]);
+
   const startIndex = state.page * pageSize + 1;
   const endIndex = Math.min((state.page + 1) * pageSize, state.totalCount);
 
@@ -254,6 +261,7 @@ export function useEmployees({ search, filter, pageSize = 5 }: UseEmployeesParam
     ...state,
     goNext,
     goPrev,
+    retry,
     hasPrev: state.page > 0,
     hasNext: !!state.pageInfo?.hasNextPage,
     startIndex: state.totalCount > 0 ? startIndex : 0,
