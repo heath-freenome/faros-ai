@@ -17,14 +17,14 @@ interface AccountMeta {
 }
 
 const ACCOUNT_META: Record<string, AccountMeta> = {
-  vcs: { icon: githubIcon, label: 'GitHub' },
   tms: { icon: jiraIcon, label: 'Jira' },
+  vcs: { icon: githubIcon, label: 'GitHub' },
   ims: { icon: pagerdutyIcon, label: 'PagerDuty' },
   cal: { icon: googleCalendarIcon, label: 'Google Calendar' },
 };
 
 // Canonical order to display account icons
-const TYPE_ORDER = ['vcs', 'tms', 'ims', 'cal'];
+const TYPE_ORDER = ['tms', 'vcs', 'ims', 'cal'];
 
 /** Props for `AccountIcons`. */
 interface AccountIconsProps {

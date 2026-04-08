@@ -1,6 +1,7 @@
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Skeleton from '@mui/material/Skeleton';
+import Button from '@mui/material/Button';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 
 import { BLUE_50, BLUE_600, GRAY_400, GRAY_700, GRAY_900 } from '../constants';
@@ -20,7 +21,7 @@ interface InsightsSectionProps {
  * a confidence progress bar.  Shows skeleton placeholders while loading.
  */
 export function InsightsSection({ employeeId, consentToken }: InsightsSectionProps) {
-  const { insights, loading, error } = useEmployeeInsights(employeeId, consentToken);
+  const { insights, loading, error, retry } = useEmployeeInsights(employeeId, consentToken);
 
   return (
     <Box
@@ -55,9 +56,18 @@ export function InsightsSection({ employeeId, consentToken }: InsightsSectionPro
       )}
 
       {error && (
-        <Typography sx={{ fontSize: '0.8125rem', color: 'error.main' }}>
-          {error}
-        </Typography>
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 1 }}>
+          <Typography sx={{ fontSize: '0.8125rem', color: 'error.main' }}>
+            {error}
+          </Typography>
+          <Button
+            size="small"
+            onClick={retry}
+            sx={{ fontSize: '0.75rem', fontWeight: 600, color: 'error.main', flexShrink: 0, minWidth: 0, p: 0, '&:hover': { backgroundColor: 'transparent', textDecoration: 'underline' } }}
+          >
+            Retry
+          </Button>
+        </Box>
       )}
 
       {insights && !loading && (

@@ -234,7 +234,7 @@ export function EmployeeTable({ onView, viewedEmployeeId }: EmployeeTableProps) 
 
   const {
     employees, totalCount, loading, error,
-    goNext, goPrev, hasNext, hasPrev, startIndex, endIndex,
+    goNext, goPrev, retry, hasNext, hasPrev, startIndex, endIndex,
   } = useEmployees({ search: state.search, filter: apiFilter, pageSize: state.pageSize });
 
   // ── Handlers ──────────────────────────────────────────────────────────────
@@ -406,7 +406,15 @@ export function EmployeeTable({ onView, viewedEmployeeId }: EmployeeTableProps) 
       )}
 
       {error && (
-        <Alert severity="error" sx={{ mb: 2 }}>
+        <Alert
+          severity="error"
+          sx={{ mb: 2 }}
+          action={
+            <Button color="inherit" size="small" onClick={retry} sx={{ fontWeight: 600, whiteSpace: 'nowrap' }}>
+              Retry
+            </Button>
+          }
+        >
           Failed to load employees: {error}
         </Alert>
       )}
